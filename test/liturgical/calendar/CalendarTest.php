@@ -26,10 +26,18 @@ class CalendarTest extends \PHPUnit_Framework_TestCase
     {
 
     }
-    public function testEpifany () {
+    public function testGetCurrentDay() {
        $this->object = new Calendar(2014);
+       $dateTime = $this->object->getCalendar('today');
+       $this->assertTrue (is_string($dateTime->time) && $dateTime->time != '');
+       $this->assertTrue (is_numeric($dateTime->weekTimeNumber) && $dateTime->weekTimeNumber > 0);
+       $this->assertTrue (is_numeric($dateTime->weekPsalterNumber) && $dateTime->weekPsalterNumber > 0);
+       var_dump($dateTime);
+       $this->setExpectedException(
+          'Exception'
+        );
+       $dateTime = $this->object->getCalendar('dsfgsdg');
     }
-
     /**
      * Tears down the fixture, for example, closes a network connection.
      * This method is called after a test is executed.
