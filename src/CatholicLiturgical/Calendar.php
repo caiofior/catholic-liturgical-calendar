@@ -1,5 +1,6 @@
 <?php
-namespace liturgical\calendar;
+declare(strict_types=1);
+namespace Caiofior\CatholicLiturgical;
 /**
  * Creates and rertives data of a chatolic lithurgic calendar
  * @author Claufio Fior caiofior@gmail.com
@@ -9,23 +10,31 @@ class Calendar {
     * Weeks in year
     */
    const weeksInYear = 52;
+   private $calendar = [];
+   private $inputDate = null ;
    /**
     * Gets the liturgic calendar data of the required date
-    * @param string $dateTimeString
+    * @param $dateTimeString
     * @return \stdClass
     */
-   public function getCalendar($dateTimeString) {
-      $inputDate = new \DateTime($dateTimeString);
-      $year = $inputDate->format('Y');
-      $calendar = $this->initCalendar($year);
-      return $calendar[$inputDate->format('W')];
+   public function __construct(string $dateTimeString) {
+      $this->inputDate = new \DateTime($dateTimeString);
+      $year = (int)$this->inputDate->format('Y');
+      $this->initCalendar($year);
+   }
+   /**
+    * Returns the day time
+    * @return array
+    */
+   public function getDateTime() : object {
+        return $this->calendar[$this->inputDate->format('W')];
    }
    /**
     * Generates the calendare of a certain year
     * @param int $year
     * @return array
     */
-   private function initCalendar($year) {
+   private function initCalendar(int $year) {
       $weekTime = array_fill(1, self::weeksInYear, 'O');
       $date = new \DateTime('+8 days 1 January '.$year);
       $epiphanyWeek = $date->format('W');
@@ -34,7 +43,7 @@ class Calendar {
          $weekTime[$c]='C';
       }
       
-      $easterDay = date('z',easter_date($year));
+      $easterDay = date('z',easter_date((int)$year));
       $date = new \DateTime('+'.$easterDay.' days 1 January '.$year);
       $easterWeek=$date->format('W');
       $lentDay=$easterDay-40;
@@ -58,7 +67,7 @@ class Calendar {
       $date = new \DateTime('25 December '.$year);
       $christmasWeek = $date->format('W');
       
-      for($c = $adventWeek+1; $c <$christmasWeek; $c++) {
+      for($c = $adventWeek; $c <$christmasWeek; $c++) {
          $weekTime[$c]='A';
       }
       for($c = $christmasWeek; $c <= self::weeksInYear; $c++) {
@@ -68,7 +77,7 @@ class Calendar {
       $date = new \DateTime('26 November '.($year-1));
       $previousAdventWeek = $date->format('W');
       $weekStarts  = (self::weeksInYear-$previousAdventWeek)%4;
-      $weekPsalterNumber = array();
+      $weekPsalterNumber = [];
       for ($c =0; $c < $adventWeek; $c++) {
          $weekPsalterNumber[$c]=($c+$weekStarts)%4+1;
       }
@@ -83,7 +92,7 @@ class Calendar {
           'E'=>1,
           'A'=>1
       );
-      $calendar = array();
+      $this->calendar = [];
       foreach ($weekTime as $weekNumber=>$currentWeekTime) {
          if ( $currentWeekTime =='C' &&
               $weekNumber >3 &&
@@ -91,13 +100,12 @@ class Calendar {
                  ) {
             $times[$currentWeekTime]=1;
          }
-         $week =new \stdClass();
-         $week->time = $currentWeekTime;
-         $week->weekTimeNumber = $times[$currentWeekTime]++;
-         $week->weekPsalterNumber = $weekPsalterNumber[$weekNumber];
-         $calendar[$weekNumber]=$week;
+         $week =new Week();
+         $week->setTime($currentWeekTime);
+         $week->setWeekTimeNumber($times[$currentWeekTime]++);
+         $week->setWeekPsalterNumber($weekPsalterNumber[$weekNumber]);
+         $this->calendar[$weekNumber]=$week;
       }
-      return $calendar;
    }
 }
 
