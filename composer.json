@@ -13,6 +13,25 @@
             "email": "caiofior@gmail.com"
         }
     ],
+    "repositories": [
+        {
+            "type": "package",
+            "package": {
+                "name": "technext/small-apps",
+                "version": "1.0",
+                "source": {
+                    "url": "https://github.com/technext/small-apps.git",
+                    "type": "git",
+                    "reference": "main"
+                }
+            }
+        }
+    ],
+    "require": {
+        "technext/small-apps": "1.0",
+        "slim/slim": "^4.11",
+        "slim/psr7": "^1.6"
+    },
     "require-dev": {
         "phpunit/phpunit": "^9.5"
     }
