@@ -21,29 +21,29 @@ FACEBOOK: https://www.facebook.com/themefisher
   <!-- Basic Page Needs
   ================================================== -->
   <meta charset="utf-8">
-  <title>Small Apps | Bootstrap App Landing Template</title>
+  <title><?=$this->get('settings')['siteName']??''?></title>
 
   <!-- Mobile Specific Metas
   ================================================== -->
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="description" content="Bootstrap App Landing Template">
+  <meta name="description" content="<?=$this->get('settings')['siteName']??''?>">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <meta name="author" content="Themefisher">
   <meta name="generator" content="Themefisher Small Apps Template v1.0">
 
   <!-- Favicon -->
-  <link rel="shortcut icon" type="image/x-icon" href="vendor/technext/small-apps/images/favicon.png" />
+  <link rel="shortcut icon" type="image/x-icon" href="<?=$this->get('settings')['baseUrl'] ?>/vendor/technext/small-apps/images/favicon.png" />
   
   <!-- PLUGINS CSS STYLE -->
-  <link rel="stylesheet" href="vendor/technext/small-apps/plugins/bootstrap/bootstrap.min.css">
-  <link rel="stylesheet" href="vendor/technext/small-apps/plugins/themify-icons/themify-icons.css">
-  <link rel="stylesheet" href="vendor/technext/small-apps/plugins/slick/slick.css">
-  <link rel="stylesheet" href="vendor/technext/small-apps/plugins/slick/slick-theme.css">
-  <link rel="stylesheet" href="vendor/technext/small-apps/plugins/fancybox/jquery.fancybox.min.css">
-  <link rel="stylesheet" href="vendor/technext/small-apps/plugins/aos/aos.css">
+  <link rel="stylesheet" href="<?=$this->get('settings')['baseUrl'] ?>/node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="<?=$this->get('settings')['baseUrl'] ?>/node_modules/themify-icons/css/themify-icons.css">
+  <link rel="stylesheet" href="<?=$this->get('settings')['baseUrl'] ?>/node_modules/slick-carousel/slick/slick.css">
+  <link rel="stylesheet" href="<?=$this->get('settings')['baseUrl'] ?>/node_modules/slick-carousel/slick/slick-theme.css">
+  <link rel="stylesheet" href="<?=$this->get('settings')['baseUrl'] ?>/node_modules/fancybox/dist/css/jquery.fancybox.css">
+  <link rel="stylesheet" href="<?=$this->get('settings')['baseUrl'] ?>/node_modules/aos/dist/aos.css">
 
   <!-- CUSTOM CSS -->
-  <link href="vendor/technext/small-apps/css/style.css" rel="stylesheet">
+  <link href="<?=$this->get('settings')['baseUrl'] ?>/vendor/technext/small-apps/css/style.css" rel="stylesheet">
 
 </head>
 
@@ -52,7 +52,7 @@ FACEBOOK: https://www.facebook.com/themefisher
 
 <nav class="navbar main-nav navbar-expand-lg px-2 px-sm-0 py-2 py-lg-0">
   <div class="container">
-    <a class="navbar-brand" href="index.html"><img src="vendor/technext/small-apps/images/logo.png" alt="logo"></a>
+    <a class="navbar-brand" href="index.html"><img src="<?=$this->get('settings')['baseUrl'] ?>/vendor/technext/small-apps/images/logo.png" alt="logo"></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
       aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="ti-menu"></span>
@@ -81,7 +81,7 @@ FACEBOOK: https://www.facebook.com/themefisher
           </ul>
         </li>
         <li class="nav-item dropdown @@pages">
-          <a class="nav-link dropdown-toggle" href="#">Pages</a>
+          <a class="nav-link dropdown-toggle" href="index.php/admin">Amministrazione</a>
           <!-- Dropdown list -->
         </li>
         <li class="nav-item @@about">
@@ -130,7 +130,7 @@ FACEBOOK: https://www.facebook.com/themefisher
                                 ?></p>
 			</div>
 			<div class="col-md-6 text-center order-1 order-md-2">
-				<img class="img-fluid" src="vendor/technext/small-apps/images/mobile.png" alt="screenshot">
+				<img class="img-fluid" src="<?=$this->get('settings')['baseUrl'] ?>/vendor/technext/small-apps/images/mobile.png" alt="screenshot">
 			</div>
 		</div>
 	</div>
@@ -174,7 +174,7 @@ FACEBOOK: https://www.facebook.com/themefisher
 			<div class="col-lg-6 ml-auto justify-content-center">
 				<!-- Feature Mockup -->
 				<div class="image-content" data-aos="fade-right">
-					<img class="img-fluid" src="vendor/technext/small-apps/images/feature/feature-new-01.jpg" alt="iphone">
+					<img class="img-fluid" src="<?=$this->get('settings')['baseUrl'] ?>/vendor/technext/small-apps/images/feature/feature-new-01.jpg" alt="iphone">
 				</div>
 			</div>
 			<div class="col-lg-6 mr-auto align-self-center">
@@ -195,7 +195,7 @@ FACEBOOK: https://www.facebook.com/themefisher
 					</p>
 					<ul class="list-inline meta">
 						<li class="list-inline-item">
-							<img src="vendor/technext/small-apps/images/testimonial/feature-testimonial-thumb.jpg" alt="">
+							<img src="<?=$this->get('settings')['baseUrl'] ?>/vendor/technext/small-apps/images/testimonial/feature-testimonial-thumb.jpg" alt="">
 						</li>
 						<li class="list-inline-item">Jonathon Andrew , Themefisher.com</li>
 					</ul>
@@ -226,7 +226,7 @@ FACEBOOK: https://www.facebook.com/themefisher
 					</p>
 					<ul class="list-inline meta">
 						<li class="list-inline-item">
-							<img src="vendor/technext/small-apps/images/testimonial/feature-testimonial-thumb.jpg" alt="">
+							<img src="<?=$this->get('settings')['baseUrl'] ?>/vendor/technext/small-apps/images/testimonial/feature-testimonial-thumb.jpg" alt="">
 						</li>
 						<li class="list-inline-item">Jonathon Andrew , Themefisher.com</li>
 					</ul>
@@ -235,7 +235,7 @@ FACEBOOK: https://www.facebook.com/themefisher
 			<div class="col-lg-6 mr-auto justify-content-center">
 				<!-- Feature mockup -->
 				<div class="image-content" data-aos="fade-left">
-					<img class="img-fluid" src="vendor/technext/small-apps/images/feature/feature-new-02.jpg" alt="ipad">
+					<img class="img-fluid" src="<?=$this->get('settings')['baseUrl'] ?>/vendor/technext/small-apps/images/feature/feature-new-02.jpg" alt="ipad">
 				</div>
 			</div>
 		</div>
@@ -261,7 +261,7 @@ FACEBOOK: https://www.facebook.com/themefisher
 			<div class="col-lg-6 align-self-center">
 				<!-- Feature Image -->
 				<div class="service-thumb left" data-aos="fade-right">
-					<img class="img-fluid" src="vendor/technext/small-apps/images/feature/iphone-ipad.jpg" alt="iphone-ipad">
+					<img class="img-fluid" src="<?=$this->get('settings')['baseUrl'] ?>/vendor/technext/small-apps/images/feature/iphone-ipad.jpg" alt="iphone-ipad">
 				</div>
 			</div>
 			<div class="col-lg-5 mr-auto align-self-center">
@@ -365,7 +365,7 @@ FACEBOOK: https://www.facebook.com/themefisher
 							</p>
 							<!-- Person Thumb -->
 							<div class="image">
-								<img src="vendor/technext/small-apps/images/testimonial/feature-testimonial-thumb.jpg" alt="image">
+								<img src="<?=$this->get('settings')['baseUrl'] ?>/vendor/technext/small-apps/images/testimonial/feature-testimonial-thumb.jpg" alt="image">
 							</div>
 							<!-- Name and Company -->
 							<cite>Abraham Linkon , Themefisher.com</cite>
@@ -383,7 +383,7 @@ FACEBOOK: https://www.facebook.com/themefisher
 							</p>
 							<!-- Person Thumb -->
 							<div class="image">
-								<img src="vendor/technext/small-apps/images/testimonial/feature-testimonial-thumb.jpg" alt="image">
+								<img src="<?=$this->get('settings')['baseUrl'] ?>/vendor/technext/small-apps/images/testimonial/feature-testimonial-thumb.jpg" alt="image">
 							</div>
 							<!-- Name and Company -->
 							<cite>Abraham Linkon , Themefisher.com</cite>
@@ -401,7 +401,7 @@ FACEBOOK: https://www.facebook.com/themefisher
 							</p>
 							<!-- Person Thumb -->
 							<div class="image">
-								<img src="vendor/technext/small-apps/images/testimonial/feature-testimonial-thumb.jpg" alt="image">
+								<img src="<?=$this->get('settings')['baseUrl'] ?>/vendor/technext/small-apps/images/testimonial/feature-testimonial-thumb.jpg" alt="image">
 							</div>
 							<!-- Name and Company -->
 							<cite>Abraham Linkon , Themefisher.com</cite>
@@ -419,7 +419,7 @@ FACEBOOK: https://www.facebook.com/themefisher
 							</p>
 							<!-- Person Thumb -->
 							<div class="image">
-								<img src="vendor/technext/small-apps/images/testimonial/feature-testimonial-thumb.jpg" alt="image">
+								<img src="<?=$this->get('settings')['baseUrl'] ?>/vendor/technext/small-apps/images/testimonial/feature-testimonial-thumb.jpg" alt="image">
 							</div>
 							<!-- Name and Company -->
 							<cite>Abraham Linkon , Themefisher.com</cite>
@@ -473,7 +473,7 @@ FACEBOOK: https://www.facebook.com/themefisher
       <div class="row">
         <div class="col-lg-4 col-md-12 m-md-auto align-self-center">
           <div class="block">
-            <a href="index.html"><img src="vendor/technext/small-apps/images/logo-alt.png" alt="footer-logo"></a>
+            <a href="index.html"><img src="<?=$this->get('settings')['baseUrl'] ?>/vendor/technext/small-apps/images/logo-alt.png" alt="footer-logo"></a>
             <!-- Social Site Icons -->
             <ul class="social-icon list-inline">
               <li class="list-inline-item">
@@ -557,17 +557,14 @@ FACEBOOK: https://www.facebook.com/themefisher
   </div>
   
   <!-- JAVASCRIPTS -->
-  <script src="vendor/technext/small-apps/plugins/jquery/jquery.min.js"></script>
-  <script src="vendor/technext/small-apps/plugins/bootstrap/bootstrap.min.js"></script>
-  <script src="vendor/technext/small-apps/plugins/slick/slick.min.js"></script>
-  <script src="vendor/technext/small-apps/plugins/fancybox/jquery.fancybox.min.js"></script>
-  <script src="vendor/technext/small-apps/plugins/syotimer/jquery.syotimer.min.js"></script>
-  <script src="vendor/technext/small-apps/plugins/aos/aos.js"></script>
-  <!-- google map -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAgeuuDfRlweIs7D6uo4wdIHVvJ0LonQ6g"></script>
-  <script src="vendor/technext/small-apps/plugins/google-map/gmap.js"></script>
+  <script src="<?=$this->get('settings')['baseUrl'] ?>/node_modules/jquery/dist/jquery.min.js"></script>
+  <script src="<?=$this->get('settings')['baseUrl'] ?>/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="<?=$this->get('settings')['baseUrl'] ?>/node_modules/slick-carousel/slick/slick.min.js"></script>
+  <script src="<?=$this->get('settings')['baseUrl'] ?>/node_modules/jquery-fancybox/source/js/jquery.fancybox.pack.js"></script>
+  <script src="<?=$this->get('settings')['baseUrl'] ?>/node_modules/jquery-syotimer/build/jquery.syotimer.min.js"></script>
+  <script src="<?=$this->get('settings')['baseUrl'] ?>/node_modules/aos/dist/aos.js"></script>
   
-  <script src="vendor/technext/small-apps/js/script.js"></script>
+  <script src="<?=$this->get('settings')['baseUrl'] ?>/vendor/technext/small-apps/js/script.js"></script>
 </body>
 
 </html>

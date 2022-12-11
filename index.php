@@ -14,13 +14,21 @@ $containerBuilder->addDefinitions(__DIR__ . '/config/container.php');
 // Create Slim App instance
 AppFactory::setContainer($containerBuilder->build());
 $app = AppFactory::create();
+
 $app->setBasePath(($app->getContainer()->get('settings')['basePath']??''));
+$app->redirect('/index.php', ($app->getContainer()->get('settings')['basePath']??'').'/', 301);
 $app->get('/', function (Request $request, Response $response, $args) {
     $theme = ($this->get('settings')['theme']??'');
     if (!empty($theme)) {
         require __DIR__.'/theme/'.$theme.'/index.php';
     }
-    $response->getBody()->write("Hello world!");
+    return $response;
+}); 
+$app->get('/index.php/admin', function (Request $request, Response $response, $args) {
+    $theme = ($this->get('settings')['theme']??'');
+    if (!empty($theme)) {
+        require __DIR__.'/theme/'.$theme.'/index.php';
+    }
     return $response;
 });
 
