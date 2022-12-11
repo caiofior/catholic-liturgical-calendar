@@ -31,7 +31,9 @@
         "technext/small-apps": "1.0",
         "slim/slim": "^4.11",
         "slim/psr7": "^1.6",
-        "php-di/php-di": "^6.4"
+        "php-di/php-di": "^6.4",
+        "doctrine/orm": "^2.13",
+        "symfony/cache": "^6.2"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5"
