@@ -12,6 +12,7 @@ class Calendar {
    const weeksInYear = 52;
    private $calendar = [];
    private $inputDate = null ;
+   private $lithurgicYear =null;
    /**
     * Gets the liturgic calendar data of the required date
     * @param $dateTimeString
@@ -28,6 +29,13 @@ class Calendar {
     */
    public function getDateTime() : object {
         return $this->calendar[$this->inputDate->format('W')];
+   }
+   /**
+    * Returns lithurgic year
+    * @return string
+    */
+   public function getLithurgicYear() {
+       return $this->lithurgicYear;
    }
    /**
     * Generates the calendare of a certain year
@@ -64,6 +72,25 @@ class Calendar {
       $date = new \DateTime('26 November '.$year);
       $adventWeek = $date->format('W');
       
+      $moduleYear = $year % 3;
+      if ($this->inputDate->format('W') > $adventWeek) {
+          $moduleYear +=1;
+      }
+      if ($moduleYear>2) {
+          $moduleYear=0;
+      }
+      switch($moduleYear) {
+          case 0 :
+              $this->lithurgicYear = 'C';
+          break;
+          case 1 :
+              $this->lithurgicYear = 'A';
+          break;
+          case 2 :
+              $this->lithurgicYear = 'B';
+          break;
+      }
+      
       $date = new \DateTime('25 December '.$year);
       $christmasWeek = $date->format('W');
       
@@ -75,7 +102,8 @@ class Calendar {
       }
       
       $date = new \DateTime('26 November '.($year-1));
-      $previousAdventWeek = $date->format('W');
+      $previousAdventWeek = $date->format('W');   
+      
       $weekStarts  = (self::weeksInYear-$previousAdventWeek)%4;
       $weekPsalterNumber = [];
       for ($c =0; $c < $adventWeek; $c++) {

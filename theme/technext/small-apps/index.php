@@ -59,31 +59,21 @@ FACEBOOK: https://www.facebook.com/themefisher
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ml-auto">
-        <li class="nav-item dropdown active">
-          <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown">Home
-            <span><i class="ti-angle-down"></i></span>
-          </a>
-          <!-- Dropdown list -->
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item active" href="index.html">Homepage</a></li>
-            <li><a class="dropdown-item" href="homepage-2.html">Homepage 2</a></li>
-            <li><a class="dropdown-item active3" href="homepage-3.html">Homepage 3</a></li>
-
-            <li class="dropdown dropdown-submenu dropright">
-              <a class="dropdown-item dropdown-toggle" href="#!" id="dropdown0301" role="button"
-                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sub Menu</a>
-
-              <ul class="dropdown-menu" aria-labelledby="dropdown0301">
-                <li><a class="dropdown-item" href="index.html">Submenu 11</a></li>
-                <li><a class="dropdown-item" href="index.html">Submenu 12</a></li>
-              </ul>
-            </li>
-          </ul>
+        <li class="nav-item dropdown <?=(empty($page)?'active':'')?>">
+          <a class="nav-link dropdown-toggle" href="<?=$this->get('settings')['baseUrl'] ?>/">Home
+          </a> 
         </li>
-        <li class="nav-item dropdown @@pages">
-          <a class="nav-link dropdown-toggle" href="index.php/admin">Amministrazione</a>
+        <?php if (empty($_SESSION['username'])) : ?>
+        <li class="nav-item dropdown @@pages <?=(($page??'')==='login'?'active':'')?>">
+          <a class="nav-link dropdown-toggle" href="<?=$this->get('settings')['baseUrl'] ?>/index.php/login">Accedi</a>
           <!-- Dropdown list -->
         </li>
+        <?php else : ?>
+        <li class="nav-item dropdown @@pages <?=(($page??'')==='logout'?'active':'')?>">
+          <a class="nav-link dropdown-toggle" href="<?=$this->get('settings')['baseUrl'] ?>/index.php/logout">Esci</a>
+          <!-- Dropdown list -->
+        </li>
+        <?php endif; ?>
         <li class="nav-item @@about">
           <a class="nav-link" href="about.html">About</a>
         </li>
@@ -118,21 +108,14 @@ FACEBOOK: https://www.facebook.com/themefisher
 		<div class="shape" data-aos="fade-down-left" data-aos-duration="500" data-aos-delay="0"></div>
 	</div>
 	<div class="container">
-		<div class="row align-items-center">
-			<div class="col-md-6 order-2 order-md-1 text-center text-md-left">
-				<h1 class="text-white font-weight-bold mb-4"><?=$this->get('settings')['siteName']??''?></h1>
-				<p class="text-white mb-5"><?php 
-                                $calendar = new \Caiofior\CatholicLiturgical\Calendar('today');
-                                $today = $calendar->getDateTime();
-                                echo $today->getTime();
-                                echo $today->getWeekTimeNumber();
-                                echo $today->getWeekPsalterNumber();
-                                ?></p>
-			</div>
-			<div class="col-md-6 text-center order-1 order-md-2">
-				<img class="img-fluid" src="<?=$this->get('settings')['baseUrl'] ?>/vendor/technext/small-apps/images/mobile.png" alt="screenshot">
-			</div>
-		</div>
+                <?php switch ($page??null) :
+                case 'login' :
+                    require __DIR__.'/../../../blocks/technext/login/main.php';
+                break;
+                default:
+                    require __DIR__.'/../../../blocks/technext/home/main.php';
+                break;
+                endswitch; ?>
 	</div>
 </section>
 <!--====  End of Hero Section  ====-->

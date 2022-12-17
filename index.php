@@ -17,6 +17,8 @@ $app = AppFactory::create();
 
 $app->setBasePath(($app->getContainer()->get('settings')['basePath']??''));
 $app->redirect('/index.php', ($app->getContainer()->get('settings')['basePath']??'').'/', 301);
+session_start();
+
 $app->get('/', function (Request $request, Response $response, $args) {
     $theme = ($this->get('settings')['theme']??'');
     if (!empty($theme)) {
@@ -24,7 +26,77 @@ $app->get('/', function (Request $request, Response $response, $args) {
     }
     return $response;
 }); 
-$app->get('/index.php/admin', function (Request $request, Response $response, $args) {
+$app->any('/index.php/login', function (Request $request, Response $response, $args) {
+    $theme = ($this->get('settings')['theme']??'');
+    /** @var \Doctrine\ORM\EntityManager $entityManager*/
+    $entityManager = $this->get('entity_manager');
+    $message = '';
+    if(isset($request->getParsedBody()['register'])) {
+        $entityManager->beginTransaction();
+        $profile = new \Caiofior\Core\Profile();
+        $profile->setRoleId(3);
+        $entityManager->persist($profile);
+        $entityManager->flush();
+        $login = new \Caiofior\Core\Login();
+        try {
+            $login->setUsername($request->getParsedBody()['username']);
+            if ($request->getParsedBody()['password'] != $request->getParsedBody()['ripeti_password']) {
+                throw new \Exception('Different password',4);
+            }
+            $login->setPassword($request->getParsedBody()['password']);
+            $login->setProfileId($profile->getId());
+            $login->setCreationDatetime(new DateTimeImmutable());
+            $entityManager->persist($login);
+            $entityManager->flush();
+        } catch (\Exception $e) {
+            if ($e instanceof \Exception) {
+                switch ($e->getCode()) {
+                    case 1:
+                    $message .= 'Utente obbligatorio';
+                        break;
+                    case 2:
+                    $message .= 'Password obbligatoria';
+                        break;
+                    case 4:
+                    $message .= 'Password diverse';
+                        break;
+                }
+            } else if ($e instanceof \Doctrine\DBAL\Exception\UniqueConstraintViolationException) {
+                $message .= 'Utente già presente';
+            }
+            $entityManager->rollback();
+        }
+        $entityManager->commit();
+    }
+    if(isset($request->getParsedBody()['login'])) {
+        /** @var \Caiofior\Core\Login $login */
+        $login = $entityManager->find('\Caiofior\Core\Login',$request->getParsedBody()['username']);
+        if(is_object($login)) {
+            try {
+                $login->checkPassword($request->getParsedBody()['password']);
+                $_SESSION['username']=$login->getUsername();
+            } catch (\Exception $e) {
+                switch ($e->getCode()) {
+                    case 3:
+                        $message .= 'Credenziali non valide';
+                    break;
+                }
+            }
+        } else {
+            $message .= 'Credenziali non valide';
+        }
+        $login->setLastLogin(new DateTimeImmutable());
+        $entityManager->persist($login);
+        $entityManager->flush();
+    }
+    $page = 'login';
+    if (!empty($theme)) {
+        require __DIR__.'/theme/'.$theme.'/index.php';
+    }
+    return $response;
+});
+$app->any('/index.php/logout', function (Request $request, Response $response, $args) {
+    session_destroy();
     $theme = ($this->get('settings')['theme']??'');
     if (!empty($theme)) {
         require __DIR__.'/theme/'.$theme.'/index.php';

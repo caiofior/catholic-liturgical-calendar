@@ -15,10 +15,10 @@ class CalendarTest extends TestCase
     public function testGetCurrentDay() {
        $this->object = new \Caiofior\CatholicLiturgical\Calendar('today');
        $dateTime = $this->object->getDateTime();
-       var_dump($dateTime);
        $this->assertTrue (is_string($dateTime->getTime()) && $dateTime->getTime() != '');
        $this->assertTrue (is_numeric($dateTime->getWeekTimeNumber()) && $dateTime->getWeekTimeNumber() > 0);
        $this->assertTrue (is_numeric($dateTime->getWeekPsalterNumber()) && $dateTime->getWeekPsalterNumber() > 0);
+       $this->assertTrue (is_string($this->object->getLithurgicYear()) && $this->object->getLithurgicYear() != '');
        $this->expectException(
           Exception::class
         );
