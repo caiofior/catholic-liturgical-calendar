@@ -17,73 +17,13 @@ FACEBOOK: https://www.facebook.com/themefisher
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-  <!-- Basic Page Needs
-  ================================================== -->
-  <meta charset="utf-8">
-  <title><?=$this->get('settings')['siteName']??''?></title>
-
-  <!-- Mobile Specific Metas
-  ================================================== -->
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="description" content="<?=$this->get('settings')['siteName']??''?>">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
-  <meta name="author" content="Themefisher">
-  <meta name="generator" content="Themefisher Small Apps Template v1.0">
-
-  <!-- Favicon -->
-  <link rel="shortcut icon" type="image/x-icon" href="<?=$this->get('settings')['baseUrl'] ?>/vendor/technext/small-apps/images/favicon.png" />
-  
-  <!-- PLUGINS CSS STYLE -->
-  <link rel="stylesheet" href="<?=$this->get('settings')['baseUrl'] ?>/node_modules/bootstrap/dist/css/bootstrap.min.css">
-  <link rel="stylesheet" href="<?=$this->get('settings')['baseUrl'] ?>/node_modules/themify-icons/css/themify-icons.css">
-  <link rel="stylesheet" href="<?=$this->get('settings')['baseUrl'] ?>/node_modules/slick-carousel/slick/slick.css">
-  <link rel="stylesheet" href="<?=$this->get('settings')['baseUrl'] ?>/node_modules/slick-carousel/slick/slick-theme.css">
-  <link rel="stylesheet" href="<?=$this->get('settings')['baseUrl'] ?>/node_modules/fancybox/dist/css/jquery.fancybox.css">
-  <link rel="stylesheet" href="<?=$this->get('settings')['baseUrl'] ?>/node_modules/aos/dist/aos.css">
-
-  <!-- CUSTOM CSS -->
-  <link href="<?=$this->get('settings')['baseUrl'] ?>/vendor/technext/small-apps/css/style.css" rel="stylesheet">
-
+   <?php require __DIR__.'/../../../blocks/technext/general/head.php'; ?>
 </head>
 
 <body class="body-wrapper" data-spy="scroll" data-target=".privacy-nav">
 
+<?php require __DIR__.'/../../../blocks/technext/general/navbar.php'; ?>
 
-<nav class="navbar main-nav navbar-expand-lg px-2 px-sm-0 py-2 py-lg-0">
-  <div class="container">
-    <a class="navbar-brand" href="index.html"><img src="<?=$this->get('settings')['baseUrl'] ?>/vendor/technext/small-apps/images/logo.png" alt="logo"></a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="ti-menu"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item dropdown <?=(empty($page)?'active':'')?>">
-          <a class="nav-link dropdown-toggle" href="<?=$this->get('settings')['baseUrl'] ?>/">Home
-          </a> 
-        </li>
-        <?php if (empty($_SESSION['username'])) : ?>
-        <li class="nav-item dropdown @@pages <?=(($page??'')==='login'?'active':'')?>">
-          <a class="nav-link dropdown-toggle" href="<?=$this->get('settings')['baseUrl'] ?>/index.php/login">Accedi</a>
-          <!-- Dropdown list -->
-        </li>
-        <?php else : ?>
-        <li class="nav-item dropdown @@pages <?=(($page??'')==='logout'?'active':'')?>">
-          <a class="nav-link dropdown-toggle" href="<?=$this->get('settings')['baseUrl'] ?>/index.php/logout">Esci</a>
-          <!-- Dropdown list -->
-        </li>
-        <?php endif; ?>
-        <li class="nav-item @@about">
-          <a class="nav-link" href="about.html">About</a>
-        </li>
-        <li class="nav-item @@contact">
-          <a class="nav-link" href="contact.html">Contact</a>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
 
 <!--====================================
 =            Hero Section            =
@@ -111,6 +51,12 @@ FACEBOOK: https://www.facebook.com/themefisher
                 <?php switch ($page??null) :
                 case 'login' :
                     require __DIR__.'/../../../blocks/technext/login/main.php';
+                break;
+                case 'profile' :
+                    require __DIR__.'/../../../blocks/technext/profile/main.php';
+                break;
+                case 'password' :
+                    require __DIR__.'/../../../blocks/technext/profile/password.php';
                 break;
                 default:
                     require __DIR__.'/../../../blocks/technext/home/main.php';
@@ -538,16 +484,7 @@ FACEBOOK: https://www.facebook.com/themefisher
   <div class="scroll-top-to">
     <i class="ti-angle-up"></i>
   </div>
-  
-  <!-- JAVASCRIPTS -->
-  <script src="<?=$this->get('settings')['baseUrl'] ?>/node_modules/jquery/dist/jquery.min.js"></script>
-  <script src="<?=$this->get('settings')['baseUrl'] ?>/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
-  <script src="<?=$this->get('settings')['baseUrl'] ?>/node_modules/slick-carousel/slick/slick.min.js"></script>
-  <script src="<?=$this->get('settings')['baseUrl'] ?>/node_modules/jquery-fancybox/source/js/jquery.fancybox.pack.js"></script>
-  <script src="<?=$this->get('settings')['baseUrl'] ?>/node_modules/jquery-syotimer/build/jquery.syotimer.min.js"></script>
-  <script src="<?=$this->get('settings')['baseUrl'] ?>/node_modules/aos/dist/aos.js"></script>
-  
-  <script src="<?=$this->get('settings')['baseUrl'] ?>/vendor/technext/small-apps/js/script.js"></script>
+  <?php require __DIR__.'/../../../blocks/technext/general/foot.php'; ?>
 </body>
 
 </html>

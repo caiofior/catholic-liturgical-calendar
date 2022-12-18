@@ -14,6 +14,7 @@
     "jquery-syotimer": "^3.1.1",
     "popper.js": "^1.16.1",
     "slick-carousel": "^1.8.1",
-    "themify-icons": "https://github.com/lykmapipo/themify-icons.git"
+    "themify-icons": "https://github.com/lykmapipo/themify-icons.git",
+    "uglify-js": "^3.17.4"
   }
 }

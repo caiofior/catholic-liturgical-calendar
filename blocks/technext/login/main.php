@@ -1,28 +1,46 @@
-<div class="row align-items-center">
-    <div class="col-md-6 order-2 order-md-1 text-center text-md-left">
-        <h1 class="text-white font-weight-bold mb-4"><?= $this->get('settings')['siteName'] ?? '' ?></h1>
+<div class="row">
+    <div class="col-12">
+        <h1 class="text-white font-weight-bold mb-4">Accesso</h1>
+    </div>
+    <div class="col-12">
         <?= $message; ?>
-        <form method="post">
-            <div class="mb-5">
-                <label class="text-white" for="username">Utente</label>
-                <input name="username" value="<?=$request->getParsedBody()['username']??''?>"/><br>
-                <label class="text-white" for="password">Password</label>
-                <input type="password" name="password"/><br>
-                <input type="submit" name="login" value="Accedi"/>
+        <form id="login" method="post">
+            <div class="row">
+                <div class="col-md-6 mb-2">
+                <input name="username" class="form-control main" type="text" placeholder="Nome utente" required value="<?=$request->getParsedBody()['username']??''?>"/>
+                </div>
+                <div class="col-md-6 mb-2">
+                <input type="password" class="form-control main" name="password" placeholder="Password" required/>
+                </div>
+                <div class="col-12 mb-4">
+                <input type="submit" class="btn btn-main-md" name="login" value="Accedi"/>
+                </div>
             </div>
         </form>
-        
-        <form method="post">
-            <div class="mb-5">
-                <label class="text-white" for="username">Utente</label>
-                <input name="username" value="<?=$request->getParsedBody()['username']??''?>"/><br>
-                <label class="text-white" for="password">Password</label>
-                <input type="password" name="password"/><br>
-                <label class="text-white" for="ripeti_password">Ripeti Password</label>
-                <input type="password" name="ripeti_password"/><br>
-                <input type="submit" name="register" value="Registrati"/>
+    </div>
+    <div class="col-12">
+        <a id="show_register" class="btn btn-rounded-icon" href="#">Vuoi registrarti?</a>
+    </div>
+    <div class="col-12">
+        <form id="register" style="display: none;" method="post">
+            <div class="row">
+                <div class="col-12">
+                <input name="username" class="form-control main" type="text" placeholder="Nome utente" required value="<?=$request->getParsedBody()['username']??''?>"/>
+                </div>
+                <div class="col-md-6 mb-2">
+                <input type="password" class="form-control main" placeholder="Password" required name="password"/><br>
+                </div>
+                <div class="col-md-6 mb-2">
+                <input type="password" class="form-control main" placeholder="Ripeti password" required name="ripeti_password"/><br>
+                </div>
+                <div class="col-12 mb-4">
+                <input type="submit" class="btn btn-main-md" name="register" value="Registrati"/>
+                </div>
             </div>
         </form>
-
+        </div>
+    <div class="col-12">
+        <a id="show_login" style="display: none;" class="btn btn-rounded-icon" href="#">Accedi</a>
+    </div>    
     </div>
 </div>

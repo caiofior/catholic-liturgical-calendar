@@ -1,4 +1,5 @@
 <?php
+
 use DI\ContainerBuilder;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -15,23 +16,24 @@ $containerBuilder->addDefinitions(__DIR__ . '/config/container.php');
 AppFactory::setContainer($containerBuilder->build());
 $app = AppFactory::create();
 
-$app->setBasePath(($app->getContainer()->get('settings')['basePath']??''));
-$app->redirect('/index.php', ($app->getContainer()->get('settings')['basePath']??'').'/', 301);
+$app->setBasePath(($app->getContainer()->get('settings')['basePath'] ?? ''));
+$app->redirect('/index.php', ($app->getContainer()->get('settings')['basePath'] ?? '') . '/', 301);
 session_start();
 
 $app->get('/', function (Request $request, Response $response, $args) {
-    $theme = ($this->get('settings')['theme']??'');
+    $theme = ($this->get('settings')['theme'] ?? '');
     if (!empty($theme)) {
-        require __DIR__.'/theme/'.$theme.'/index.php';
+        require __DIR__ . '/theme/' . $theme . '/index.php';
     }
     return $response;
-}); 
+});
 $app->any('/index.php/login', function (Request $request, Response $response, $args) {
-    $theme = ($this->get('settings')['theme']??'');
-    /** @var \Doctrine\ORM\EntityManager $entityManager*/
+    $theme = ($this->get('settings')['theme'] ?? '');
+    /** @var \Doctrine\ORM\EntityManager $entityManager */
     $entityManager = $this->get('entity_manager');
     $message = '';
-    if(isset($request->getParsedBody()['register'])) {
+    $page = 'login';
+    if (isset($request->getParsedBody()['register'])) {
         $entityManager->beginTransaction();
         $profile = new \Caiofior\Core\Profile();
         $profile->setRoleId(3);
@@ -41,7 +43,7 @@ $app->any('/index.php/login', function (Request $request, Response $response, $a
         try {
             $login->setUsername($request->getParsedBody()['username']);
             if ($request->getParsedBody()['password'] != $request->getParsedBody()['ripeti_password']) {
-                throw new \Exception('Different password',4);
+                throw new \Exception('Different password', 4);
             }
             $login->setPassword($request->getParsedBody()['password']);
             $login->setProfileId($profile->getId());
@@ -52,13 +54,13 @@ $app->any('/index.php/login', function (Request $request, Response $response, $a
             if ($e instanceof \Exception) {
                 switch ($e->getCode()) {
                     case 1:
-                    $message .= 'Utente obbligatorio';
+                        $message .= 'Utente obbligatorio';
                         break;
                     case 2:
-                    $message .= 'Password obbligatoria';
+                        $message .= 'Password obbligatoria';
                         break;
                     case 4:
-                    $message .= 'Password diverse';
+                        $message .= 'Password diverse';
                         break;
                 }
             } else if ($e instanceof \Doctrine\DBAL\Exception\UniqueConstraintViolationException) {
@@ -68,18 +70,18 @@ $app->any('/index.php/login', function (Request $request, Response $response, $a
         }
         $entityManager->commit();
     }
-    if(isset($request->getParsedBody()['login'])) {
+    if (isset($request->getParsedBody()['login'])) {
         /** @var \Caiofior\Core\Login $login */
-        $login = $entityManager->find('\Caiofior\Core\Login',$request->getParsedBody()['username']);
-        if(is_object($login)) {
+        $login = $entityManager->find('\Caiofior\Core\Login', $request->getParsedBody()['username']);
+        if (is_object($login)) {
             try {
                 $login->checkPassword($request->getParsedBody()['password']);
-                $_SESSION['username']=$login->getUsername();
+                $_SESSION['username'] = $login->getUsername();
             } catch (\Exception $e) {
                 switch ($e->getCode()) {
                     case 3:
                         $message .= 'Credenziali non valide';
-                    break;
+                        break;
                 }
             }
         } else {
@@ -88,20 +90,74 @@ $app->any('/index.php/login', function (Request $request, Response $response, $a
         $login->setLastLogin(new DateTimeImmutable());
         $entityManager->persist($login);
         $entityManager->flush();
+        $page = 'dashboard';
     }
-    $page = 'login';
     if (!empty($theme)) {
-        require __DIR__.'/theme/'.$theme.'/index.php';
+        require __DIR__ . '/theme/' . $theme . '/index.php';
     }
     return $response;
 });
 $app->any('/index.php/logout', function (Request $request, Response $response, $args) {
     session_destroy();
-    $theme = ($this->get('settings')['theme']??'');
+    unset($_SESSION);
+    $theme = ($this->get('settings')['theme'] ?? '');
     if (!empty($theme)) {
-        require __DIR__.'/theme/'.$theme.'/index.php';
+        require __DIR__ . '/theme/' . $theme . '/index.php';
     }
     return $response;
 });
-
+$app->any('/index.php/profilo', function (Request $request, Response $response, $args) {
+    $theme = ($this->get('settings')['theme'] ?? '');
+    /** @var \Doctrine\ORM\EntityManager $entityManager */
+    $entityManager = $this->get('entity_manager');
+    $message = '';
+    $page = 'profile';
+    $login = $entityManager->find('\Caiofior\Core\Login', $_SESSION['username']);
+    $profile = $entityManager->find('\Caiofior\Core\Profile', $login->getProfileId());
+    if (isset($request->getParsedBody()['salva'])) {
+        $profile->setData($request->getParsedBody());
+        $entityManager->persist($profile);
+        $entityManager->flush();
+        $profile = $entityManager->find('\Caiofior\Core\Profile', $login->getProfileId());
+        $page='';
+    }
+    if (!empty($theme)) {
+        require __DIR__ . '/theme/' . $theme . '/index.php';
+    }
+    return $response;
+});
+$app->any('/index.php/password', function (Request $request, Response $response, $args) {
+    $theme = ($this->get('settings')['theme'] ?? '');
+    /** @var \Doctrine\ORM\EntityManager $entityManager */
+    $entityManager = $this->get('entity_manager');
+    $message = '';
+    $page = 'password';
+    $login = $entityManager->find('\Caiofior\Core\Login', $_SESSION['username']);
+    if (isset($request->getParsedBody()['salva'])) {
+        try {
+            if ($request->getParsedBody()['password'] != $request->getParsedBody()['ripeti_password']) {
+                throw new \Exception('Different password', 4);
+            }
+            $login->setPassword($request->getParsedBody()['password']);
+            $entityManager->persist($login);
+            $entityManager->flush();
+            $page='';
+        } catch (\Exception $e) {
+            if ($e instanceof \Exception) {
+                switch ($e->getCode()) {
+                    case 2:
+                        $message .= 'Password obbligatoria';
+                        break;
+                    case 4:
+                        $message .= 'Password diverse';
+                        break;
+                }
+            }
+        }
+    }
+    if (!empty($theme)) {
+        require __DIR__ . '/theme/' . $theme . '/index.php';
+    }
+    return $response;
+});
 $app->run();

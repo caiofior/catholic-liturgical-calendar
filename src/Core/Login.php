@@ -67,6 +67,13 @@ final class Login {
         $this->password = password_hash($password, PASSWORD_BCRYPT);
     }
     /**
+     * Get profile_id
+     * @return int
+     */
+    public function getProfileId() {
+        return $this->profile_id;
+    }
+    /**
      * Set profile_id
      * @param int $profile_id
      */
@@ -96,5 +103,5 @@ final class Login {
         if (!password_verify($password, $this->password)) {
             throw new \Exception('Password not valid',3);
         }
-    }
+    }    
 }

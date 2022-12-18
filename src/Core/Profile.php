@@ -69,5 +69,31 @@ final class Profile {
     public function setRoleId($role_id) {
         $this->role_id = $role_id;
     }
+    /**
+     * Set data
+     * @param array $data
+     */
+    public function setData(array $data) {
+        $obj = new \ReflectionObject($this); 
+        foreach ((array)$this as $field => $value) {
+            $field = substr(str_replace($obj->getName(), '', $field),2);
+            if (isset($data[$field])) {
+                $this->$field=$data[$field];
+            }
+        }
+    }
+    /**
+     * Get data
+     * @return array
+     */
+    public function getData() {
+        $data = array();
+        $obj = new \ReflectionObject($this); 
+        foreach ((array)$this as $field => $value) {
+            $field = substr(str_replace($obj->getName(), '', $field),2);
+            $data[$field]=$value; 
+        }
+        return $data;
+    }
     
 }
