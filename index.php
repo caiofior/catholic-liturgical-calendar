@@ -160,4 +160,24 @@ $app->any('/index.php/password', function (Request $request, Response $response,
     }
     return $response;
 });
+$app->any('/index.php/calendari', function (Request $request, Response $response, $args) {
+    $theme = ($this->get('settings')['theme'] ?? '');
+    $page = 'calendar';
+    if (!empty($theme)) {
+        require __DIR__ . '/theme/' . $theme . '/index.php';
+    }
+    return $response;
+});
+$app->any('/index.php/calendari/aggiungi', function (Request $request, Response $response, $args) {
+    $theme = ($this->get('settings')['theme'] ?? '');
+    /** @var \Doctrine\ORM\EntityManager $entityManager */
+    $entityManager = $this->get('entity_manager');
+    $message = '';
+    $page = 'calendar/add';
+    $calendar = new \Caiofior\CatholicLiturgical\CalendarProperties();
+    if (!empty($theme)) {
+        require __DIR__ . '/theme/' . $theme . '/index.php';
+    }
+    return $response;
+});
 $app->run();

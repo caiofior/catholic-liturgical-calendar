@@ -13,4 +13,8 @@
         case 'login' : ?>
   <script src="<?=$this->get('settings')['baseUrl'] ?>/theme/technext/small-apps/js/login.js"></script>
    <?php break;
+        case 'calendar/add' : ?>
+  <script src="<?=$this->get('settings')['baseUrl'] ?>/node_modules/tinymce/tinymce.min.js"></script>
+  <script src="<?=$this->get('settings')['baseUrl'] ?>/theme/technext/small-apps/js/calendar.add.js"></script>
+   <?php break;
    endswitch; ?>

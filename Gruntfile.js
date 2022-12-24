@@ -6,7 +6,8 @@ module.exports = function (grunt) {
         uglify: {
             my_target: {
                 files: {
-                    'theme/technext/small-apps/js/login.min.js': ['theme/technext/small-apps/js/login.js']
+                    'theme/technext/small-apps/js/login.min.js': ['theme/technext/small-apps/js/login.js'],
+                    'theme/technext/small-apps/js/calendar.add.min.js': ['theme/technext/small-apps/js/calendar.add.js']
                 }
             }
         }

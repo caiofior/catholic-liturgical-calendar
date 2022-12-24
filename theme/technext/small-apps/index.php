@@ -58,6 +58,12 @@ FACEBOOK: https://www.facebook.com/themefisher
                 case 'password' :
                     require __DIR__.'/../../../blocks/technext/profile/password.php';
                 break;
+                case 'calendar' :
+                    require __DIR__.'/../../../blocks/technext/calendar/list.php';
+                break;
+                case 'calendar/add' :
+                    require __DIR__.'/../../../blocks/technext/calendar/edit.php';
+                break;
                 default:
                     require __DIR__.'/../../../blocks/technext/home/main.php';
                 break;
