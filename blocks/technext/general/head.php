@@ -25,3 +25,4 @@
 
   <!-- CUSTOM CSS -->
   <link href="<?=$this->get('settings')['baseUrl'] ?>/vendor/technext/small-apps/css/style.css" rel="stylesheet">
+  <link href="<?=$this->get('settings')['baseUrl'] ?>/theme/technext/small-apps/css/style.css" rel="stylesheet">

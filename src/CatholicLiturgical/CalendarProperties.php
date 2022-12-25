@@ -40,7 +40,7 @@ final class CalendarProperties {
     #[Column(type: 'smallint', nullable: false, options: ["default" => 1])]
     private int $salther=0;
     
-    #[Column(type: 'string', nullable: true)]
+    #[Column(type: 'text', nullable: true)]
     private string $name='';
     
     #[Column(type: 'string', nullable: true)]
@@ -60,10 +60,30 @@ final class CalendarProperties {
      */
     public function setData(array $data) {
         $obj = new \ReflectionObject($this); 
-        foreach ((array)$this as $field => $value) {
-            $field = substr(str_replace($obj->getName(), '', $field),2);
+        foreach ($obj->getProperties() as $property ) {
+            $field = $property->name;
+            
+            $attr = [];
+            foreach($property->getAttributes() as $attibute) {
+                if($attibute->getName()== 'Doctrine\ORM\Mapping\Column') {
+                    $attr = $attibute->getArguments();
+                    break;
+                }
+            }            
             if (isset($data[$field])) {
-                $this->$field=$data[$field];
+                switch ($attr['type']) {
+                    case 'smallint':
+                        $this->$field=0;
+                        if(!empty($data[$field])) {
+                            $this->$field=1;
+                        }
+                        break;
+                    case 'int':
+                        $this->$field=(int)$data[$field];
+                        break;
+                    default;
+                        $this->$field=$data[$field];
+                }
             }
         }
     }

@@ -175,6 +175,20 @@ $app->any('/index.php/calendari/aggiungi', function (Request $request, Response 
     $message = '';
     $page = 'calendar/add';
     $calendar = new \Caiofior\CatholicLiturgical\CalendarProperties();
+    /** @var \Caiofior\Core\Login $login **/
+    $login = $entityManager->find('\Caiofior\Core\Login', $_SESSION['username']);
+    if (isset($request->getParsedBody()['salva'])) {
+        try {
+            $data =$request->getParsedBody();
+            $data['profile_id']=$login->getProfileId();
+            $calendar->setData($data);
+            $entityManager->persist($calendar);
+            $entityManager->flush();
+            $page='';
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
     if (!empty($theme)) {
         require __DIR__ . '/theme/' . $theme . '/index.php';
     }
