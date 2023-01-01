@@ -22,6 +22,8 @@
   <link rel="stylesheet" href="<?=$this->get('settings')['baseUrl'] ?>/node_modules/slick-carousel/slick/slick-theme.css">
   <link rel="stylesheet" href="<?=$this->get('settings')['baseUrl'] ?>/node_modules/fancybox/dist/css/jquery.fancybox.css">
   <link rel="stylesheet" href="<?=$this->get('settings')['baseUrl'] ?>/node_modules/aos/dist/aos.css">
+  <link rel="stylesheet" href="<?=$this->get('settings')['baseUrl'] ?>/node_modules/bootstrap-table/dist/bootstrap-table.min.css">
+  <link rel="stylesheet" href="<?=$this->get('settings')['baseUrl'] ?>/node_modules/bootstrap-table/dist/themes/bootstrap-table/bootstrap-table.min.css">
 
   <!-- CUSTOM CSS -->
   <link href="<?=$this->get('settings')['baseUrl'] ?>/vendor/technext/small-apps/css/style.css" rel="stylesheet">

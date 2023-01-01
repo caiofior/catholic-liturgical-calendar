@@ -15,7 +15,7 @@ use Doctrine\ORM\Mapping\Table;
  * @author caiofior
  */
 #[Entity, Table(name: 'calendar_properties')]
-final class CalendarProperties {
+final class CalendarProperties implements \JsonSerializable {
     #[Id, Column(type: 'integer', unique: true, nullable: false), GeneratedValue]
     private int $id;
     
@@ -78,7 +78,7 @@ final class CalendarProperties {
                             $this->$field=1;
                         }
                         break;
-                    case 'int':
+                    case 'integer':
                         $this->$field=(int)$data[$field];
                         break;
                     default;
@@ -94,11 +94,24 @@ final class CalendarProperties {
     public function getData() {
         $data = array();
         $obj = new \ReflectionObject($this); 
-        foreach ((array)$this as $field => $value) {
-            $field = substr(str_replace($obj->getName(), '', $field),2);
-            $data[$field]=$value; 
+        foreach ($obj->getProperties() as $property ) {
+            $field = $property->name;
+            
+            foreach($property->getAttributes() as $attibute) {
+                if($attibute->getName()== 'Doctrine\ORM\Mapping\Column') {
+                    $field = $property->getName();
+                    if(isset($this->$field)) {
+                        $data[$field] = $this->$field;
+                    }
+                    break;
+                }
+            }
         }
         return $data;
+    }
+    
+    public function jsonSerialize(): mixed {
+        return $this->getData();
     }
     
 }

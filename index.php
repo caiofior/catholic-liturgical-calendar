@@ -119,7 +119,7 @@ $app->any('/index.php/profilo', function (Request $request, Response $response, 
         $entityManager->persist($profile);
         $entityManager->flush();
         $profile = $entityManager->find('\Caiofior\Core\Profile', $login->getProfileId());
-        $page='';
+        $page = '';
     }
     if (!empty($theme)) {
         require __DIR__ . '/theme/' . $theme . '/index.php';
@@ -141,7 +141,7 @@ $app->any('/index.php/password', function (Request $request, Response $response,
             $login->setPassword($request->getParsedBody()['password']);
             $entityManager->persist($login);
             $entityManager->flush();
-            $page='';
+            $page = '';
         } catch (\Exception $e) {
             if ($e instanceof \Exception) {
                 switch ($e->getCode()) {
@@ -168,23 +168,46 @@ $app->any('/index.php/calendari', function (Request $request, Response $response
     }
     return $response;
 });
-$app->any('/index.php/calendari/aggiungi', function (Request $request, Response $response, $args) {
+$app->any('/index.php/calendari/list', function (Request $request, Response $response, $args) {
+    /** @var \Doctrine\ORM\EntityManager $entityManager */
+    $entityManager = $this->get('entity_manager');
+    $results = $entityManager->getRepository('\Caiofior\CatholicLiturgical\CalendarProperties')->findBy([]);
+    $data = array();
+    array_walk($results, function ($value, $key) use (&$data) {
+        $data[$key] = json_decode(json_encode($value));
+        $data[$key]->actions = <<<EOT
+<div class="icon-container">
+    <a href="{$this->get('settings')['baseUrl']}/index.php/calendari/modifica/{$data[$key]->id}">
+        <span class="ti-pencil"></span>
+    </a>
+    <a class="trash" href="{$this->get('settings')['baseUrl']}/index.php/calendari/cancella/{$data[$key]->id}">
+        <span class="ti-trash"></span>  
+    </a>
+</div>  
+EOT;
+    });
+    return $response->withJson($data, 201);
+});
+$app->any('/index.php/calendari/modifica[/{id}]', function (Request $request, Response $response, $args) {
     $theme = ($this->get('settings')['theme'] ?? '');
     /** @var \Doctrine\ORM\EntityManager $entityManager */
     $entityManager = $this->get('entity_manager');
     $message = '';
     $page = 'calendar/add';
     $calendar = new \Caiofior\CatholicLiturgical\CalendarProperties();
-    /** @var \Caiofior\Core\Login $login **/
-    $login = $entityManager->find('\Caiofior\Core\Login', $_SESSION['username']);
+    if(!empty($args['id'])) {
+        $calendar = $entityManager->find('\Caiofior\CatholicLiturgical\CalendarProperties', $args['id']);
+    }
+    /** @var \Caiofior\Core\Login $login * */
+    $login = $entityManager->find('\Caiofior\Core\Login', ($_SESSION['username'] ?? ''));
     if (isset($request->getParsedBody()['salva'])) {
         try {
-            $data =$request->getParsedBody();
-            $data['profile_id']=$login->getProfileId();
+            $data = $request->getParsedBody();
+            $data['profile_id'] = $login->getProfileId();
             $calendar->setData($data);
             $entityManager->persist($calendar);
             $entityManager->flush();
-            $page='';
+            return $response->withHeader('Location', $this->get('settings')['baseUrl'].'/index.php/calendari')->withStatus(302);
         } catch (\Exception $e) {
             throw $e;
         }
@@ -193,5 +216,16 @@ $app->any('/index.php/calendari/aggiungi', function (Request $request, Response 
         require __DIR__ . '/theme/' . $theme . '/index.php';
     }
     return $response;
+});
+$app->any('/index.php/calendari/cancella/{id}', function (Request $request, Response $response, $args) {
+    $theme = ($this->get('settings')['theme'] ?? '');
+    /** @var \Doctrine\ORM\EntityManager $entityManager */
+    $entityManager = $this->get('entity_manager');
+    $message = '';
+    $page = 'calendar/add';
+    $calendar = $entityManager->find('\Caiofior\CatholicLiturgical\CalendarProperties', $args['id']);
+    $entityManager->remove($calendar);
+    $entityManager->flush();
+    return $response->withHeader('Location', $this->get('settings')['baseUrl'].'/index.php/calendari')->withStatus(302);
 });
 $app->run();

@@ -131,7 +131,7 @@ class Calendar {
          $week =new Week();
          $week->setTime($currentWeekTime);
          $week->setWeekTimeNumber($times[$currentWeekTime]++);
-         $week->setWeekPsalterNumber($weekPsalterNumber[$weekNumber]);
+         $week->setWeekPsalterNumber($weekPsalterNumber[(int)$weekNumber]);
          $this->calendar[$weekNumber]=$week;
       }
    }

@@ -7,6 +7,7 @@
         <form id="profilo" method="post">
             <div class="row">
                 <div class="col-md-12 mb-2">
+                    <input name="id" type="hidden" value="<?= $calendar->getData()['id'] ?? '' ?>"/>
                     <input name="name" class="form-control main" type="text" placeholder="Nome" value="<?= $calendar->getData()['name'] ?? '' ?>"/>
                 </div>
                 <div class="col-md-12 mb-2">
@@ -17,7 +18,7 @@
                         <span class="absolute">
                             Anno liturgico
                         </span>
-                        <input style="" name="lithurgicYear" class="form-control modal-content" type="checkbox"  value="1"/>
+                        <input style="" name="lithurgicYear" class="form-control modal-content" type="checkbox" <?=(($calendar->getData()['lithurgicYear']??false) ? 'checked' : '')?> value="1"/>
                     </p>
                 </div>
                 <div class="col-md-12 mb-2">
@@ -26,7 +27,7 @@
                             Calendario liturgico
                         </span>
                     </p>
-                    <input name="lithurgicEve" class="form-control modal-content" type="checkbox" value="1"/>
+                    <input name="lithurgicEve" class="form-control modal-content" type="checkbox" <?=(($calendar->getData()['lithurgicEve']??false) ? 'checked' : '')?> value="1"/>
                 </div>
                 <div class="col-md-12 mb-2">
                     <p for="lithurgicYear" class="text-white">
@@ -34,7 +35,7 @@
                             Salterio
                         </span>
                     </p>
-                    <input name="salther" class="form-control modal-content" type="checkbox" value="1"/>
+                    <input name="salther" class="form-control modal-content" type="checkbox" <?=(($calendar->getData()['salter']??false) ? 'checked' : '')?> value="1"/>
                 </div>
                 <div class="col-12 mb-4">
                     <input type="submit" class="btn btn-main-md" name="salva" value="Salva"/>

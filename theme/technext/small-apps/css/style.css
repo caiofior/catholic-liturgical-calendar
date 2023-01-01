@@ -12,3 +12,6 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
     position: absolute;
     top: auto;
 }
+.modal .btn {
+	background-color: #007bff;
+}
