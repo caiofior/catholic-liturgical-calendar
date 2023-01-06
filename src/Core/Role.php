@@ -20,5 +20,12 @@ final class Role {
 
     #[Column(type: 'string', nullable: false)]
     private string $description;
+    /**
+     * Returns description
+     * @return string
+     */
+    public function getDescription() : string {
+        return $this->description;
+    }
 
 }

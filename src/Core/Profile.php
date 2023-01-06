@@ -61,7 +61,13 @@ final class Profile {
     public function getId() {
         return $this->id;
     }
-    
+    /**
+     * Return role id
+     * @return int
+     */
+    function getRoleId () : int {
+        return $this->role_id;
+    }
      /**
      * Set role id
      * @param int $role_id

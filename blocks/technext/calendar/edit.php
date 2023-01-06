@@ -1,6 +1,14 @@
 <div class="row">
     <div class="col-12">
-        <h1 class="text-white font-weight-bold mb-4">Calendario</h1>
+        <div class="icon-container">
+            <h1 class="text-white font-weight-bold mb-4">Calendario
+                <?php if ($calendar->getData()['id'] > 0) : ?>
+                    <a title="Aggiungi preghiera" href="<?= $this->get('settings')['baseUrl'] ?>/index.php/preghiera/modifica/?calendario=<?=$calendar->getData()['id']?>">
+                        <span class="ti-plus"></span>
+                    </a>
+                <?php endif; ?>
+        </div> 
+        </h1>
     </div>
     <div class="col-12">
         <?= $message; ?>
@@ -13,12 +21,30 @@
                 <div class="col-md-12 mb-2">
                     <textarea id="description" name="description" class="form-control main"><?= $calendar->getData()['description'] ?? '' ?></textarea>
                 </div>
+                <?php if ($role->getDescription() == 'administrator') : ?>
+                    <div class="col-md-12 mb-2" >
+                        <p class="text-white">
+                            <span class="absolute">
+                                Approvato
+                            </span>
+                            <input style="" name="approved" class="form-control modal-content" type="checkbox" <?= (($calendar->getData()['approved'] ?? false) ? 'checked' : '') ?> value="1"/>
+                        </p>
+                    </div>
+                    <div class="col-md-12 mb-2" >
+                        <p class="text-white">
+                            <span class="absolute">
+                                Pubblico
+                            </span>
+                            <input style="" name="public" class="form-control modal-content" type="checkbox" <?= (($calendar->getData()['public'] ?? false) ? 'checked' : '') ?> value="1"/>
+                        </p>
+                    </div>
+                <?php endif; ?>
                 <div class="col-md-12 mb-2" >
                     <p class="text-white">
                         <span class="absolute">
                             Anno liturgico
                         </span>
-                        <input style="" name="lithurgicYear" class="form-control modal-content" type="checkbox" <?=(($calendar->getData()['lithurgicYear']??false) ? 'checked' : '')?> value="1"/>
+                        <input style="" name="lithurgicYear" class="form-control modal-content" type="checkbox" <?= (($calendar->getData()['lithurgicYear'] ?? false) ? 'checked' : '') ?> value="1"/>
                     </p>
                 </div>
                 <div class="col-md-12 mb-2">
@@ -27,7 +53,7 @@
                             Calendario liturgico
                         </span>
                     </p>
-                    <input name="lithurgicEve" class="form-control modal-content" type="checkbox" <?=(($calendar->getData()['lithurgicEve']??false) ? 'checked' : '')?> value="1"/>
+                    <input name="lithurgicEve" class="form-control modal-content" type="checkbox" <?= (($calendar->getData()['lithurgicEve'] ?? false) ? 'checked' : '') ?> value="1"/>
                 </div>
                 <div class="col-md-12 mb-2">
                     <p for="lithurgicYear" class="text-white">
@@ -35,7 +61,7 @@
                             Salterio
                         </span>
                     </p>
-                    <input name="salther" class="form-control modal-content" type="checkbox" <?=(($calendar->getData()['salter']??false) ? 'checked' : '')?> value="1"/>
+                    <input name="salther" class="form-control modal-content" type="checkbox" <?= (($calendar->getData()['salther'] ?? false) ? 'checked' : '') ?> value="1"/>
                 </div>
                 <div class="col-12 mb-4">
                     <input type="submit" class="btn btn-main-md" name="salva" value="Salva"/>

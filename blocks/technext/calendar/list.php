@@ -19,8 +19,9 @@
                     data-search="true">
                     <thead>
                         <tr>
-                            <th data-sortable="true" data-field="username">Profilo</th>
-                            <th data-sortable="true" data-field="approved">Attivo</th>
+                            <th data-sortable="true" data-field="username">Utente</th>
+                            <th data-sortable="true" data-field="approved">Approvato</th>
+                            <th data-sortable="true" data-field="public">Pubblico</th>
                             <th data-sortable="true" data-field="name">Nome</th>
                             <th data-events="operateEvents" data-field="actions"></th>
                         </tr>
