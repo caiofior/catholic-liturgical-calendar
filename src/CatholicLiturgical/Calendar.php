@@ -28,7 +28,7 @@ class Calendar {
     * @return array
     */
    public function getDateTime() : object {
-        return $this->calendar[$this->inputDate->format('W')];
+        return $this->calendar[(int)$this->inputDate->format('W')];
    }
    /**
     * Returns lithurgic year
@@ -50,10 +50,9 @@ class Calendar {
       for($c = 1; $c <$epiphanyWeek; $c++) {
          $weekTime[$c]='C';
       }
-      
       $easterDay = date('z',easter_date((int)$year));
       $date = new \DateTime('+'.$easterDay.' days 1 January '.$year);
-      $easterWeek=$date->format('W');
+      $easterWeek=(int)$date->format('W');
       $lentDay=$easterDay-40;
       $date = new \DateTime('+'.$lentDay.' days 1 January '.$year);
       $lentWeek=$date->format('W');
@@ -123,7 +122,7 @@ class Calendar {
       $this->calendar = [];
       foreach ($weekTime as $weekNumber=>$currentWeekTime) {
          if ( $currentWeekTime =='C' &&
-              $weekNumber >3 &&
+              $weekNumber > 3 &&
               $times[$currentWeekTime] > (self::weeksInYear-$previousAdventWeek)
                  ) {
             $times[$currentWeekTime]=1;

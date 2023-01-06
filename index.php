@@ -171,10 +171,58 @@ $app->any('/index.php/calendari', function (Request $request, Response $response
 $app->any('/index.php/calendari/list', function (Request $request, Response $response, $args) {
     /** @var \Doctrine\ORM\EntityManager $entityManager */
     $entityManager = $this->get('entity_manager');
-    $results = $entityManager->getRepository('\Caiofior\CatholicLiturgical\CalendarProperties')->findBy([]);
+    $queryBuilder = $entityManager
+            ->getConnection()
+            ->createQueryBuilder();
+    $totalNotFiltered = $queryBuilder
+            ->select('COUNT(*)')
+            ->from('calendar_properties')
+            ->fetchFirstColumn();
+
+    $total = $queryBuilder
+            ->select('COUNT(*)')
+            ->from('calendar_properties')
+            ->setFirstResult(($request->getQueryParams()['offset'] ?? 0))
+            ->setMaxResults(($request->getQueryParams()['limit'] ?? 10))
+            ->fetchFirstColumn();
+
+    $query = $queryBuilder
+            ->select('cp.*', 'l.username')
+            ->from('calendar_properties', 'cp')
+            ->join(
+            'cp',
+            'login',
+            'l',
+            'cp.profile_id = l.profile_id'
+    );
+    if (!empty($request->getQueryParams()['search'])) {
+        $query = $query
+                ->where(
+                        $queryBuilder->expr()->like('cp.name', ':search')
+                )
+                ->setParameter('search', '%' . ($request->getQueryParams()['search'] ?? '') . '%');
+    }
+    if (!empty($request->getQueryParams()['sort'])) {
+        $query = $query
+                ->orderBy($request->getQueryParams()['sort'] ?? '', $request->getQueryParams()['order'] ?? '');
+    }
+    $query = $query
+            ->setFirstResult(($request->getQueryParams()['offset'] ?? 0))
+            ->setMaxResults(($request->getQueryParams()['limit'] ?? 10));
+    $results = $query
+            ->fetchAllAssociative();
     $data = array();
     array_walk($results, function ($value, $key) use (&$data) {
         $data[$key] = json_decode(json_encode($value));
+        if ($data[$key]->approved == true) {
+            $data[$key]->approved = <<<EOT
+<div class="icon-container">
+     <span class="ti-check"></span>
+</div>
+EOT;
+        } else {
+            $data[$key]->approved = '';
+        }
         $data[$key]->actions = <<<EOT
 <div class="icon-container">
     <a href="{$this->get('settings')['baseUrl']}/index.php/calendari/modifica/{$data[$key]->id}">
@@ -186,7 +234,11 @@ $app->any('/index.php/calendari/list', function (Request $request, Response $res
 </div>  
 EOT;
     });
-    return $response->withJson($data, 201);
+    return $response->withJson([
+        'total' => $total,
+        'totalNotFiltered' => $totalNotFiltered,
+        'rows' => $data
+            ], 201);
 });
 $app->any('/index.php/calendari/modifica[/{id}]', function (Request $request, Response $response, $args) {
     $theme = ($this->get('settings')['theme'] ?? '');
@@ -195,7 +247,7 @@ $app->any('/index.php/calendari/modifica[/{id}]', function (Request $request, Re
     $message = '';
     $page = 'calendar/add';
     $calendar = new \Caiofior\CatholicLiturgical\CalendarProperties();
-    if(!empty($args['id'])) {
+    if (!empty($args['id'])) {
         $calendar = $entityManager->find('\Caiofior\CatholicLiturgical\CalendarProperties', $args['id']);
     }
     /** @var \Caiofior\Core\Login $login * */
@@ -207,7 +259,7 @@ $app->any('/index.php/calendari/modifica[/{id}]', function (Request $request, Re
             $calendar->setData($data);
             $entityManager->persist($calendar);
             $entityManager->flush();
-            return $response->withHeader('Location', $this->get('settings')['baseUrl'].'/index.php/calendari')->withStatus(302);
+            return $response->withHeader('Location', $this->get('settings')['baseUrl'] . '/index.php/calendari')->withStatus(302);
         } catch (\Exception $e) {
             throw $e;
         }
@@ -226,6 +278,6 @@ $app->any('/index.php/calendari/cancella/{id}', function (Request $request, Resp
     $calendar = $entityManager->find('\Caiofior\CatholicLiturgical\CalendarProperties', $args['id']);
     $entityManager->remove($calendar);
     $entityManager->flush();
-    return $response->withHeader('Location', $this->get('settings')['baseUrl'].'/index.php/calendari')->withStatus(302);
+    return $response->withHeader('Location', $this->get('settings')['baseUrl'] . '/index.php/calendari')->withStatus(302);
 });
 $app->run();

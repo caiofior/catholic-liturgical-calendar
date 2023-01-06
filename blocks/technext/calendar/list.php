@@ -14,12 +14,13 @@
                     data-toggle="table"
                     data-locale="it"
                     data-url="calendari/list"
+                    data-side-pagination="server"
                     data-pagination="true"
                     data-search="true">
                     <thead>
                         <tr>
-                            <th data-sortable="true" data-field="profile">Profilo</th>
-                            <th data-field="approved">Attivo</th>
+                            <th data-sortable="true" data-field="username">Profilo</th>
+                            <th data-sortable="true" data-field="approved">Attivo</th>
                             <th data-sortable="true" data-field="name">Nome</th>
                             <th data-events="operateEvents" data-field="actions"></th>
                         </tr>

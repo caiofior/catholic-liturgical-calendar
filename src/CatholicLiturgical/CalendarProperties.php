@@ -14,7 +14,7 @@ use Doctrine\ORM\Mapping\Table;
  *
  * @author caiofior
  */
-#[Entity, Table(name: 'calendar_properties')]
+#[Entity, Table(name: 'calendar_properties'), Index(name: "name", columns: ["name"])]
 final class CalendarProperties implements \JsonSerializable {
     #[Id, Column(type: 'integer', unique: true, nullable: false), GeneratedValue]
     private int $id;
@@ -22,22 +22,25 @@ final class CalendarProperties implements \JsonSerializable {
     #[Column(type: 'integer', nullable: false)]
     private int $profile_id;
     
+    #[Column(type: 'smallint', nullable: false, options: ["default" => 0])]
+    private int $public=0;
+    
     #[Column(type: 'smallint', nullable: false, options: ["default" => 1])]
     private int $active=0;
     
-    #[Column(type: 'smallint', nullable: false, options: ["default" => 1])]
+    #[Column(type: 'smallint', nullable: false, options: ["default" => 0])]
     private int $approved=0;
     
     #[Column(type: 'datetimetz_immutable', nullable: true)]
     private DateTimeImmutable $creation;
 
-    #[Column(type: 'smallint', nullable: false, options: ["default" => 1])]
+    #[Column(type: 'smallint', nullable: false, options: ["default" => 0])]
     private int $lithurgicYear=0;
     
-    #[Column(type: 'smallint', nullable: false, options: ["default" => 1])]
+    #[Column(type: 'smallint', nullable: false, options: ["default" => 0])]
     private int $lithurgicEve=0;
     
-    #[Column(type: 'smallint', nullable: false, options: ["default" => 1])]
+    #[Column(type: 'smallint', nullable: false, options: ["default" => 0])]
     private int $salther=0;
     
     #[Column(type: 'text', nullable: true)]
