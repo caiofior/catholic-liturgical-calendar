@@ -3,7 +3,7 @@
         <div class="icon-container">
             <h1 class="text-white font-weight-bold mb-4">Calendario
                 <?php if ($calendar->getData()['id'] > 0) : ?>
-                    <a title="Aggiungi preghiera" href="<?= $this->get('settings')['baseUrl'] ?>/index.php/preghiera/modifica/?calendario=<?=$calendar->getData()['id']?>">
+                    <a title="Aggiungi preghiera" href="<?= $this->get('settings')['baseUrl'] ?>/index.php/preghiere/modifica/?calendario=<?=$calendar->getData()['id']?>">
                         <span class="ti-plus"></span>
                     </a>
                 <?php endif; ?>
@@ -22,6 +22,14 @@
                     <textarea id="description" name="description" class="form-control main"><?= $calendar->getData()['description'] ?? '' ?></textarea>
                 </div>
                 <?php if ($role->getDescription() == 'administrator') : ?>
+                    <div class="col-md-12 mb-2" >
+                        <p class="text-white">
+                            <span class="absolute">
+                                Predefinito
+                            </span>
+                            <input style="" name="default" class="form-control modal-content" type="checkbox" <?= ((is_object ($option) && $option->getValue() == $calendar->getData()['id']) ? 'checked' : '') ?> value="1"/>
+                        </p>
+                    </div>
                     <div class="col-md-12 mb-2" >
                         <p class="text-white">
                             <span class="absolute">

@@ -162,6 +162,9 @@ $app->any('/index.php/password', function (Request $request, Response $response,
     return $response;
 });
 $app->group('/index.php/calendari', function (RouteCollectorProxy $group) {
-    require __DIR__.'/control/calendari.php';
+    return \Caiofior\Control\CalendarProperties::parse($group);
+});
+$app->group('/index.php/preghiere', function (RouteCollectorProxy $group) {
+    return \Caiofior\Control\Prey::parse($group);
 });
 $app->run();

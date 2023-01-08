@@ -20,9 +20,18 @@ final class Option {
 
     #[Column(type: 'text', nullable: false)]
     private string $value;
-
+    
     /**
      * Sets an option
+     * @param string $value
+     * @throws \Exception
+     */
+    public function setOption(string $option) {
+        $this->option = $option;
+    }
+
+    /**
+     * Sets an option value
      * @param string $value
      * @throws \Exception
      */
@@ -30,7 +39,7 @@ final class Option {
         $this->value = $value;
     }
     /**
-     * Get value
+     * Get value value
      * @return string
      */
     public function getValue() :string {
