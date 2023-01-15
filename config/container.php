@@ -30,5 +30,9 @@ return [
 
         return EntityManager::create($settings['doctrine']['connection'], $config);
     },
+    'date_formatter'=>function(ContainerInterface $container) {
+        $settings = $container->get('settings');
+        return new IntlDateFormatter($settings['locale'], IntlDateFormatter::FULL, IntlDateFormatter::NONE);
+    }
 ];
 

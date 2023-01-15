@@ -7,7 +7,7 @@
                         <span class="ti-plus"></span>
                     </a>
                 <?php endif; ?>
-        </div> 
+        </div>
         </h1>
     </div>
     <div class="col-12">

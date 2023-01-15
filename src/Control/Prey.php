@@ -20,6 +20,15 @@ class Prey {
      */
     public static function parse(RouteCollectorProxy $group) {
         $group->any('', function (Request $request, Response $response, $args) {
+            $entityManager = $this->get('entity_manager');
+            $calendar = $entityManager->find('\Caiofior\CatholicLiturgical\CalendarProperties', $args['id']);
+            $today = new \DateTime();
+            $lastDay = clone $today;
+            $lastDay = $lastDay->sub(new DateInterval('P1D'));
+            $nextDay = clone $today;
+            $nextDay = $nextDay->add(new DateInterval('P1D'));
+            $catholicCalendar = new \Caiofior\CatholicLiturgical\Calendar($today->format('Y-m-d'));
+            $todayEve = $catholicCalendar->getDateTime();
             $theme = ($this->get('settings')['theme'] ?? '');
             $page = 'prey';
             if (!empty($theme)) {
@@ -108,16 +117,27 @@ EOT;
                 'rows' => $data
                     ], 201);
         });
-        $group->any('/modifica/', function (Request $request, Response $response, $args) {
+        $group->any('/modifica/', function (Request $request, Response $response) {
+            $entityManager = $this->get('entity_manager');
+            $dateFormatter = $this->get('date_formatter');
+            $calendar = $entityManager->find('\Caiofior\CatholicLiturgical\CalendarProperties', ($request->getQueryParams()['calendario'] ?? 0));
+            $today = \DateTime::createFromFormat('Y-m-d', ($request->getQueryParams()['giorno']??''));
+            if(!is_object($today)) {
+                $today = new \DateTime();
+            }
+            $previousDay = clone $today;
+            $previousDay = $previousDay->sub(new \DateInterval('P1D'));
+            $nextDay = clone $today;
+            $nextDay = $nextDay->add(new \DateInterval('P1D'));
+            $catholicCalendar = new \Caiofior\CatholicLiturgical\Calendar($today->format('Y-m-d'));
+            $todayEve = $catholicCalendar->getDateTime();
+            
+            
             $theme = ($this->get('settings')['theme'] ?? '');
             /** @var \Doctrine\ORM\EntityManager $entityManager */
             $entityManager = $this->get('entity_manager');
             $message = '';
             $page = 'prey/add';
-            $calendar = new \Caiofior\CatholicLiturgical\CalendarProperties();
-            if (!empty($args['id'])) {
-                $calendar = $entityManager->find('\Caiofior\CatholicLiturgical\CalendarProperties', $args['id']);
-            }
             /** @var \Caiofior\Core\Login $login */
             $login = $entityManager->find('\Caiofior\Core\Login', ($_SESSION['username'] ?? ''));
             /** @var \Caiofior\Core\Profile $profile */

@@ -22,7 +22,19 @@ class Week {
      * Salter number
      * @var int
      */
-    private int $weekPsalterNumber;
+    private int $weekPsalterNumber ;
+    /**
+     * Names of lithurgic year eve
+     * @var array
+     */
+    private array $timeNames = [
+        'C'=>'Natale',
+        'A'=>'Avvento',
+        'L'=>'Quaresima',
+        'P'=>'Pasqua',
+        'T'=>'Settimana santa',
+        'O'=>'Ordinario'
+    ];
     /**
      * Sets lithurgic time
      * @param string $time
@@ -50,6 +62,13 @@ class Week {
      */
     public function getTime () : string  {
         return $this->time;
+    }
+    /**
+     * Gest time of lithurgic year
+     * @return string
+     */
+    public function getTimeDescritpion () : string  {
+        return $this->timeNames[$this->time]??'';
     }
     /**
      * Gets week time number
