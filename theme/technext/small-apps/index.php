@@ -64,6 +64,9 @@ FACEBOOK: https://www.facebook.com/themefisher
                 case 'calendar/add' :
                     require __DIR__.'/../../../blocks/technext/calendar/edit.php';
                 break;
+                case 'prey' :
+                    require __DIR__.'/../../../blocks/technext/prey/list.php';
+                break;    
                 case 'prey/add' :
                     require __DIR__.'/../../../blocks/technext/prey/edit.php';
                 break;

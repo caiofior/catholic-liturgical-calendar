@@ -34,7 +34,8 @@
         "php-di/php-di": "^6.4",
         "doctrine/orm": "^2.13",
         "symfony/cache": "^6.2",
-        "slim/http": "^1.3"
+        "slim/http": "^1.3",
+        "creof/doctrine2-spatial": "^1.2"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5"

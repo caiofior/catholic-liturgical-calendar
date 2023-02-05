@@ -8,7 +8,7 @@ $basePath = '/~caiofior/catholic-liturgical-calendar';
 // Settings
 $settings = [
     'basePath' => $basePath,
-    'baseUrl' => 'http://' . ($_SERVER['SERVER_NAME']??'') . $basePath,
+    'baseUrl' => 'http://' . ($_SERVER['SERVER_NAME'] ?? '') . $basePath,
     'theme' => 'technext/small-apps',
     'siteName' => 'Calendario liturgico',
     'locale' => 'it_IT',
@@ -22,7 +22,7 @@ $settings = [
         // List of paths where Doctrine will search for metadata.
         // Metadata can be either YML/XML files or PHP classes annotated
         // with comments or PHP8 attributes.
-        'metadata_dirs' => [__DIR__ . '/../src/Core',__DIR__ . '/../src/CatholicLiturgical'],
+        'metadata_dirs' => [__DIR__ . '/../src/Core', __DIR__ . '/../src/CatholicLiturgical'],
         // The parameters Doctrine needs to connect to your database.
         // These parameters depend on the driver (for instance the 'pdo_sqlite' driver
         // needs a 'path' parameter and doesn't use most of the ones shown in this example).

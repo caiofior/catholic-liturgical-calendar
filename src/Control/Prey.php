@@ -21,14 +21,14 @@ class Prey {
     public static function parse(RouteCollectorProxy $group) {
         $group->any('', function (Request $request, Response $response, $args) {
             $entityManager = $this->get('entity_manager');
-            $calendar = $entityManager->find('\Caiofior\CatholicLiturgical\CalendarProperties', $args['id']);
             $today = new \DateTime();
             $lastDay = clone $today;
-            $lastDay = $lastDay->sub(new DateInterval('P1D'));
+            $lastDay = $lastDay->sub(new \DateInterval('P1D'));
             $nextDay = clone $today;
-            $nextDay = $nextDay->add(new DateInterval('P1D'));
+            $nextDay = $nextDay->add(new \DateInterval('P1D'));
             $catholicCalendar = new \Caiofior\CatholicLiturgical\Calendar($today->format('Y-m-d'));
             $todayEve = $catholicCalendar->getDateTime();
+            
             $theme = ($this->get('settings')['theme'] ?? '');
             $page = 'prey';
             if (!empty($theme)) {
@@ -117,10 +117,17 @@ EOT;
                 'rows' => $data
                     ], 201);
         });
-        $group->any('/modifica/', function (Request $request, Response $response) {
+        $group->any('/modifica/', function (Request $request, Response $response,$args) {
+            
             $entityManager = $this->get('entity_manager');
             $dateFormatter = $this->get('date_formatter');
+            /** @var \Caiofior\CatholicLiturgical\CalendarProperties $calendar */
             $calendar = $entityManager->find('\Caiofior\CatholicLiturgical\CalendarProperties', ($request->getQueryParams()['calendario'] ?? 0));
+            /** @var \Caiofior\CatholicLiturgical\Prey $prey */
+            $prey = new \Caiofior\CatholicLiturgical\Prey();
+            if (!empty($args['id'])) {
+                $prey = $entityManager->find('\Caiofior\CatholicLiturgical\Prey', ($request->getQueryParams()['id'] ?? 0));
+            }
             $today = \DateTime::createFromFormat('Y-m-d', ($request->getQueryParams()['giorno']??''));
             if(!is_object($today)) {
                 $today = new \DateTime();
@@ -129,9 +136,9 @@ EOT;
             $previousDay = $previousDay->sub(new \DateInterval('P1D'));
             $nextDay = clone $today;
             $nextDay = $nextDay->add(new \DateInterval('P1D'));
+            /** @var \Caiofior\CatholicLiturgical\Calendar $calendar */
             $catholicCalendar = new \Caiofior\CatholicLiturgical\Calendar($today->format('Y-m-d'));
             $todayEve = $catholicCalendar->getDateTime();
-            
             
             $theme = ($this->get('settings')['theme'] ?? '');
             /** @var \Doctrine\ORM\EntityManager $entityManager */
@@ -153,20 +160,32 @@ EOT;
             if (isset($request->getParsedBody()['salva'])) {
                 try {
                     $data = $request->getParsedBody();
-                    if (empty($calendar->getProfileId())) {
-                        $data['profile_id'] = $login->getProfileId();
+                    $data['creation']=new \DateTimeImmutable();
+                    if(!isset($data['use_lithurgic_eve'])) {
+                        unset($data['lithurgic_eve']);
                     }
-                    $calendar->setData($data);
-                    $entityManager->persist($calendar);
+                    if(!isset($data['use_lithurgic_week'])) {
+                        unset($data['lithurgic_week']);
+                    }
+                    if(!isset($data['use_lithurgic_year'])) {
+                        unset($data['lithurgic_year']);
+                    }
+                    if(!isset($data['use_salter_week'])) {
+                        unset($data['salter_week']);
+                    }
+                    if(!isset($data['use_day_of_week'])) {
+                        unset($data['day_of_week']);
+                    }
+                    if(!isset($data['use_day_of_year'])) {
+                        unset($data['day_of_year']);
+                    }
+                    if(!isset($data['use_today'])) {
+                        unset($data['today']);
+                    }
+                    $prey->setData($data);
+                    $entityManager->persist($prey);
                     $entityManager->flush();
-                    if (
-                            !empty($data['default'])
-                    ) {
-                        $option->setValue((string) $calendar->getData()['id']);
-                        $entityManager->persist($option);
-                        $entityManager->flush();
-                    }
-                    return $response->withHeader('Location', $this->get('settings')['baseUrl'] . '/index.php/calendari')->withStatus(302);
+                    return $response->withHeader('Location', $this->get('settings')['baseUrl'] . '/index.php/calendari/modifica/'.$data['calendar_id'])->withStatus(302);
                 } catch (\Exception $e) {
                     throw $e;
                 }
