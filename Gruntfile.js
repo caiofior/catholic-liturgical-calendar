@@ -10,6 +10,7 @@ module.exports = function (grunt) {
                     'theme/technext/small-apps/js/calendar.add.min.js': ['theme/technext/small-apps/js/calendar.add.js'],
                     'theme/technext/small-apps/js/calendar.list.min.js': ['theme/technext/small-apps/js/calendar.list.js'],
                     'theme/technext/small-apps/js/prey.add.min.js': ['theme/technext/small-apps/js/prey.add.js'],
+                    'theme/technext/small-apps/js/pray.list.min.js': ['theme/technext/small-apps/js/pray.list.js'],
                 }
             }
         }

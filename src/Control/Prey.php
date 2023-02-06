@@ -44,29 +44,35 @@ class Prey {
                     ->createQueryBuilder();
             $totalNotFiltered = $queryBuilder
                     ->select('COUNT(*)')
-                    ->from('calendar_properties')
+                    ->from('prey')
                     ->fetchFirstColumn();
 
             $total = $queryBuilder
                     ->select('COUNT(*)')
-                    ->from('calendar_properties')
+                    ->from('prey')
                     ->setFirstResult(($request->getQueryParams()['offset'] ?? 0))
                     ->setMaxResults(($request->getQueryParams()['limit'] ?? 10))
                     ->fetchFirstColumn();
 
             $query = $queryBuilder
-                    ->select('cp.*', 'l.username')
-                    ->from('calendar_properties', 'cp')
-                    ->join(
+                    ->select('p.*', 'l.username')
+                    ->from('prey', 'p')
+                    ->leftJoin(
+                    'p',
+                    'calendar_properties',
+                    'cp',
+                    'cp.id = p.calendar_id'
+                    )
+                    ->leftJoin(
                     'cp',
                     'login',
                     'l',
                     'cp.profile_id = l.profile_id'
-            );
+            )->groupBy('p.id');
             if (!empty($request->getQueryParams()['search'])) {
                 $query = $query
                         ->where(
-                                $queryBuilder->expr()->like('cp.name', ':search')
+                                $queryBuilder->expr()->like('p.title', ':search')
                         )
                         ->setParameter('search', '%' . ($request->getQueryParams()['search'] ?? '') . '%');
             }
@@ -91,21 +97,12 @@ EOT;
                 } else {
                     $data[$key]->approved = '';
                 }
-                if ($data[$key]->public == true) {
-                    $data[$key]->public = <<<EOT
-<div class="icon-container">
-     <span class="ti-check"></span>
-</div>
-EOT;
-                } else {
-                    $data[$key]->public = '';
-                }
                 $data[$key]->actions = <<<EOT
 <div class="icon-container">
-    <a href="{$this->get('settings')['baseUrl']}/index.php/calendari/modifica/{$data[$key]->id}">
+    <a href="{$this->get('settings')['baseUrl']}/index.php/preghiere/modifica/{$data[$key]->id}">
         <span class="ti-pencil"></span>
     </a>
-    <a class="trash" href="{$this->get('settings')['baseUrl']}/index.php/calendari/cancella/{$data[$key]->id}">
+    <a class="trash" href="{$this->get('settings')['baseUrl']}/index.php/preghiere/cancella/{$data[$key]->id}">
         <span class="ti-trash"></span>  
     </a>
 </div>  
@@ -117,7 +114,7 @@ EOT;
                 'rows' => $data
                     ], 201);
         });
-        $group->any('/modifica/', function (Request $request, Response $response,$args) {
+        $group->any('/modifica/[{id}]', function (Request $request, Response $response,$args) {
             
             $entityManager = $this->get('entity_manager');
             $dateFormatter = $this->get('date_formatter');
@@ -126,7 +123,8 @@ EOT;
             /** @var \Caiofior\CatholicLiturgical\Prey $prey */
             $prey = new \Caiofior\CatholicLiturgical\Prey();
             if (!empty($args['id'])) {
-                $prey = $entityManager->find('\Caiofior\CatholicLiturgical\Prey', ($request->getQueryParams()['id'] ?? 0));
+                $prey = $entityManager->find('\Caiofior\CatholicLiturgical\Prey', ($args['id']));
+                $calendar = $entityManager->find('\Caiofior\CatholicLiturgical\CalendarProperties', ($prey->getData()['calendar_id'] ?? 0));
             }
             $today = \DateTime::createFromFormat('Y-m-d', ($request->getQueryParams()['giorno']??''));
             if(!is_object($today)) {
@@ -201,10 +199,10 @@ EOT;
             $entityManager = $this->get('entity_manager');
             $message = '';
             $page = 'calendar/add';
-            $calendar = $entityManager->find('\Caiofior\CatholicLiturgical\CalendarProperties', $args['id']);
-            $entityManager->remove($calendar);
+            $prey = $entityManager->find('\Caiofior\CatholicLiturgical\Prey', $args['id']);
+            $entityManager->remove($prey);
             $entityManager->flush();
-            return $response->withHeader('Location', $this->get('settings')['baseUrl'] . '/index.php/calendari')->withStatus(302);
+            return $response->withHeader('Location', $this->get('settings')['baseUrl'] . '/index.php/preghiere')->withStatus(302);
         });
     }
 

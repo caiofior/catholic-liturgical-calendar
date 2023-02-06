@@ -61,19 +61,19 @@
                     <input type="hidden" name="day_of_year" value="<?= $today->format('z'); ?>"/>
                 </div>
                 <div class="col-md-6 mb-2">
-                    <input name="hour" class="form-control main" type="text" placeholder="Ora" value=""/>
+                    <input name="hour" class="form-control main" type="text" placeholder="Ora" value="<?= $prey->getData()['hour'] ?? '' ?>"/>
                 </div>
                 <div class="col-md-6 mb-2">
-                    <input name="sort" class="form-control main" type="text" placeholder="Ordine" value=""/>
+                    <input name="sort" class="form-control main" type="text" placeholder="Ordine" value="<?= $prey->getData()['sort'] ?? '' ?>"/>
                 </div>
                 <div class="col-md-12 mb-2">
-                    <input name="title" class="form-control main" type="text" placeholder="Titolo" value=""/>
+                    <input name="title" class="form-control main" type="text" placeholder="Titolo" value="<?= $prey->getData()['title'] ?? '' ?>"/>
                 </div>
                 <div class="col-md-12 mb-2">
-                    <input name="referrer" class="form-control main" type="text" placeholder="Riferimento" value=""/>
+                    <input name="referrer" class="form-control main" type="text" placeholder="Riferimento" value="<?= $prey->getData()['reference'] ?? '' ?>"/>
                 </div>
                 <div class="col-md-12 mb-2">
-                    <textarea id="content" name="content" class="form-control main"></textarea>
+                    <textarea id="content" name="content" class="form-control main"><?= $prey->getData()['content'] ?? '' ?></textarea>
                 </div>
                 <div class="col-12 mb-4">
                     <input type="submit" class="btn btn-main-md" name="salva" value="Salva"/>

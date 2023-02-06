@@ -64,7 +64,7 @@ final class Prey implements \JsonSerializable {
     private $reference ;
     
     #[Column(type: 'text', nullable: true)]
-    private $name;
+    private $content;
     
     #[Column(type: 'point', nullable: true)]
     private $place;

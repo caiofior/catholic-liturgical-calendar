@@ -13,7 +13,7 @@
                 <table
                     data-toggle="table"
                     data-locale="it"
-                    data-url="calendari/list"
+                    data-url="preghiere/list"
                     data-side-pagination="server"
                     data-pagination="true"
                     data-search="true">

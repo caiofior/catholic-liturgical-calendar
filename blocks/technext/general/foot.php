@@ -27,6 +27,9 @@
         case 'calendar' : ?>
   <script src="<?=$this->get('settings')['baseUrl'] ?>/theme/technext/small-apps/js/calendar.list.js"></script>
    <?php break;
+    case 'prey' : ?>
+  <script src="<?=$this->get('settings')['baseUrl'] ?>/theme/technext/small-apps/js/prey.list.js"></script>
+   <?php break;
         case 'prey/add' : ?>
   <script src="<?=$this->get('settings')['baseUrl'] ?>/node_modules/tinymce/tinymce.min.js"></script>
   <script src="<?=$this->get('settings')['baseUrl'] ?>/node_modules/tinymce-langs/langs/it.js"></script>
