@@ -70,7 +70,7 @@
                     <input name="title" class="form-control main" type="text" placeholder="Titolo" value="<?= $prey->getData()['title'] ?? '' ?>"/>
                 </div>
                 <div class="col-md-12 mb-2">
-                    <input name="referrer" class="form-control main" type="text" placeholder="Riferimento" value="<?= $prey->getData()['reference'] ?? '' ?>"/>
+                    <input name="reference" class="form-control main" type="text" placeholder="Riferimento" value="<?= $prey->getData()['reference'] ?? '' ?>"/>
                 </div>
                 <div class="col-md-12 mb-2">
                     <textarea id="content" name="content" class="form-control main"><?= $prey->getData()['content'] ?? '' ?></textarea>

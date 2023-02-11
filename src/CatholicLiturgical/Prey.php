@@ -38,6 +38,9 @@ final class Prey implements \JsonSerializable {
 
     #[Column(type: 'string', nullable: true)]
     private $lithurgic_eve ;
+    
+    #[Column(type: 'integer', nullable: true)]
+    private $lithurgic_week=0;
 
     #[Column(type: 'integer', nullable: true)]
     private $salter_week=0;
