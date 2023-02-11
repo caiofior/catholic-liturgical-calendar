@@ -5,4 +5,8 @@ window.operateEvents = {
             window.location = $(e.target).parent().attr("href");
         });
     }
-}
+};
+$("a.add").click(function (e) {
+        let url = $(this).attr("href")+"?calendario="+$("select[name=calendario] option:selected").attr("value"); 
+        $(this).attr("href",url);
+});

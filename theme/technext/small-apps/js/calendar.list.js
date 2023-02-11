@@ -5,4 +5,4 @@ window.operateEvents = {
             window.location = $(e.target).parent().attr("href");
         });
     }
-}
+};

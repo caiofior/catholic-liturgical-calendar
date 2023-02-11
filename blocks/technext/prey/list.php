@@ -5,10 +5,39 @@
             <div class="card-body ">
                 <p class="text-white mb-5">
                 <div class="icon-container">
-                    <a title="Aggiungi" href="<?= $this->get('settings')['baseUrl'] ?>/index.php/preghiere/modifica">
+                    <a class="add" title="Aggiungi" href="<?= $this->get('settings')['baseUrl'] ?>/index.php/preghiere/modifica/">
                         <span class="ti-plus"></span>
                     </a>
                 </div> 
+                </p>
+                <p>
+                    <input type="hidden" name="today" value="<?= $today->format('Y-m-d'); ?>"/>
+                    <a href="<?= $this->get('settings')['baseUrl'] ?>/index.php/preghiere?calendario=<?=$calendar->getData()['id']??null?>&giorno=<?= $previousDay->format('Y-m-d');?>" titile="<?= $previousDay->format('d/m/Y'); ?>">
+                    <span class="icon-container">
+                        <span class="ti-angle-left"></span>
+                    </span>
+                    </a>
+                    <span>                        
+                        <?= $dateFormatter->format($today); ?>
+                    </span>
+                    <a href="<?= $this->get('settings')['baseUrl'] ?>/index.php/preghiere?calendario=<?=$calendar->getData()['id']??null?>&giorno=<?= $nextDay->format('Y-m-d');?>" title="<?= $nextDay->format('d/m/Y'); ?>">
+                    <span class="icon-container">
+                        <span class="ti-angle-right"></span>
+                    </span>
+                    </a>
+                    <select name="calendario">
+                    <?php
+                    $calendarColl = $entityManager->getRepository('\Caiofior\CatholicLiturgical\CalendarProperties')->findAll();
+                    /** @var \Caiofior\CatholicLiturgical\CalendarProperties $calendarItem */
+                    foreach ($calendarColl as $calendarItem) :
+                        $checked = '';
+                        if($calendarItem->getData()['id'] == $calendar->getData()['id']) {
+                            $checked = ' checked ';
+                        }
+                        ?>
+                        <option <?=$checked?> value="<?=$calendarItem->getData()['id'];?>"><?=$calendarItem->getData()['name'];?></option>
+                    <?php endforeach; ?>
+                    </select>
                 </p>
                 <table
                     data-toggle="table"
@@ -19,9 +48,10 @@
                     data-search="true">
                     <thead>
                         <tr>
-                            <th data-sortable="true" data-field="calendar">Calendario</th>
                             <th data-sortable="true" data-field="title">Titolo</th>
-                            <th data-sortable="true" data-field="username">Utente</th>
+                            <th data-sortable="true" data-field="reference">Riferimento</th>
+                            <th data-sortable="true" data-field="sort">Ordine</th>
+                            <th data-sortable="true" data-field="hour">Ora</th>
                             <th data-sortable="true" data-field="approved">Approvato</th>
                             <th data-events="operateEvents" data-field="actions"></th>
                         </tr>

@@ -21,13 +21,21 @@ class Prey {
     public static function parse(RouteCollectorProxy $group) {
         $group->any('', function (Request $request, Response $response, $args) {
             $entityManager = $this->get('entity_manager');
-            $today = new \DateTime();
-            $lastDay = clone $today;
-            $lastDay = $lastDay->sub(new \DateInterval('P1D'));
+            $dateFormatter = $this->get('date_formatter');
+            /** @var \Caiofior\CatholicLiturgical\CalendarProperties $calendar */
+            $calendar = $entityManager->find('\Caiofior\CatholicLiturgical\CalendarProperties', ($request->getQueryParams()['calendario'] ?? 0));
+            if(!is_object($calendar)) {
+                $calendar = new \Caiofior\CatholicLiturgical\CalendarProperties();
+            }
+            
+            $today = \DateTime::createFromFormat('Y-m-d', ($request->getQueryParams()['giorno']??''));
+            if(!is_object($today)) {
+                $today = new \DateTime();
+            }
+            $previousDay = clone $today;
+            $previousDay = $previousDay->sub(new \DateInterval('P1D'));
             $nextDay = clone $today;
             $nextDay = $nextDay->add(new \DateInterval('P1D'));
-            $catholicCalendar = new \Caiofior\CatholicLiturgical\Calendar($today->format('Y-m-d'));
-            $todayEve = $catholicCalendar->getDateTime();
             
             $theme = ($this->get('settings')['theme'] ?? '');
             $page = 'prey';
@@ -39,6 +47,18 @@ class Prey {
         $group->any('/list', function (Request $request, Response $response, $args) {
             /** @var \Doctrine\ORM\EntityManager $entityManager */
             $entityManager = $this->get('entity_manager');
+            
+            /** @var \Caiofior\CatholicLiturgical\CalendarProperties $calendar */
+            $calendar = $entityManager->find('\Caiofior\CatholicLiturgical\CalendarProperties', ($request->getQueryParams()['calendario'] ?? 0));
+            if(!is_object($calendar)) {
+                $calendar = new \Caiofior\CatholicLiturgical\CalendarProperties();
+            }
+            
+            $today = \DateTime::createFromFormat('Y-m-d', ($request->getQueryParams()['giorno']??''));
+            if(!is_object($today)) {
+                $today = new \DateTime();
+            }
+            
             $queryBuilder = $entityManager
                     ->getConnection()
                     ->createQueryBuilder();
@@ -46,15 +66,31 @@ class Prey {
                     ->select('COUNT(*)')
                     ->from('prey')
                     ->fetchFirstColumn();
-
-            $total = $queryBuilder
+            $total = $entityManager
+                    ->getConnection()
+                    ->createQueryBuilder()
                     ->select('COUNT(*)')
-                    ->from('prey')
+                    ->from('prey','p')
+                    ->leftJoin(
+                    'p',
+                    'calendar_properties',
+                    'cp',
+                    'cp.id = p.calendar_id'
+                    )
+                    ->leftJoin(
+                    'cp',
+                    'login',
+                    'l',
+                    'cp.profile_id = l.profile_id'
+                    )
                     ->setFirstResult(($request->getQueryParams()['offset'] ?? 0))
                     ->setMaxResults(($request->getQueryParams()['limit'] ?? 10))
                     ->fetchFirstColumn();
-
-            $query = $queryBuilder
+            
+            
+            $query = $entityManager
+                    ->getConnection()
+                    ->createQueryBuilder()
                     ->select('p.*', 'l.username')
                     ->from('prey', 'p')
                     ->leftJoin(
@@ -68,7 +104,15 @@ class Prey {
                     'login',
                     'l',
                     'cp.profile_id = l.profile_id'
-            )->groupBy('p.id');
+                    )->groupBy('p.id');
+           
+            if(!empty($calendar->getData()['id'])) {
+            $query = $query
+                        ->where(
+                                $queryBuilder->expr()->like('p.calendar_id', ':calendar')
+                        )
+                        ->setParameter('calendar', $calendar->getData()['id']);
+            }
             if (!empty($request->getQueryParams()['search'])) {
                 $query = $query
                         ->where(
@@ -83,6 +127,8 @@ class Prey {
             $query = $query
                     ->setFirstResult(($request->getQueryParams()['offset'] ?? 0))
                     ->setMaxResults(($request->getQueryParams()['limit'] ?? 10));
+            
+            
             $results = $query
                     ->fetchAllAssociative();
             $data = array();

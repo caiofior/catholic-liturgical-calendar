@@ -25,7 +25,7 @@
                         <?= $dateFormatter->format($today); ?>
                     </span>
                     <a href="<?= $this->get('settings')['baseUrl'] ?>/index.php/preghiere/modifica/?calendario=<?=$calendar->getData()['id']?>&giorno=<?= $nextDay->format('Y-m-d');?>" title="<?= $nextDay->format('d/m/Y'); ?>">
-                        <span class="icon-container">
+                    <span class="icon-container">
                         <span class="ti-angle-right"></span>
                     </span>
                     </a>
