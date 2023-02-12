@@ -25,7 +25,7 @@ class Calendar {
    }
    /**
     * Returns the day time
-    * @return array
+    * @return Week
     */
    public function getDateTime() : object {
         $weekOfYear = (int)$this->inputDate->format('W');

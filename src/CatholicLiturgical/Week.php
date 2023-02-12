@@ -67,7 +67,7 @@ class Week {
      * Gest time of lithurgic year
      * @return string
      */
-    public function getTimeDescritpion () : string  {
+    public function getTimeDescription () : string  {
         return $this->timeNames[$this->time]??'';
     }
     /**

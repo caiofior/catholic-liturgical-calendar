@@ -42,7 +42,7 @@
                 <table
                     data-toggle="table"
                     data-locale="it"
-                    data-url="preghiere/list"
+                    data-url="preghiere/list?calendar=<?=$calendar->getData()['id']?>&giorno=<?=$today->format('Y-m-d');?>"
                     data-side-pagination="server"
                     data-pagination="true"
                     data-search="true">

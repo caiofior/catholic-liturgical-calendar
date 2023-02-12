@@ -22,11 +22,13 @@ class Prey {
         $group->any('', function (Request $request, Response $response, $args) {
             $entityManager = $this->get('entity_manager');
             $dateFormatter = $this->get('date_formatter');
-            /** @var \Caiofior\CatholicLiturgical\CalendarProperties $calendar */
-            $calendar = $entityManager->find('\Caiofior\CatholicLiturgical\CalendarProperties', ($request->getQueryParams()['calendario'] ?? 0));
-            if(!is_object($calendar)) {
-                $calendar = new \Caiofior\CatholicLiturgical\CalendarProperties();
+            $calendarId = (int)($request->getQueryParams()['calendario'] ?? 0);
+            if($calendarId == 0) {
+                $option = $entityManager->find('\Caiofior\Core\Option', 'default_calendar');
+                $calendarId = $option->getValue();
             }
+            /** @var \Caiofior\CatholicLiturgical\CalendarProperties $calendar */
+            $calendar = $entityManager->find('\Caiofior\CatholicLiturgical\CalendarProperties', $calendarId);
             
             $today = \DateTime::createFromFormat('Y-m-d', ($request->getQueryParams()['giorno']??''));
             if(!is_object($today)) {
@@ -48,16 +50,19 @@ class Prey {
             /** @var \Doctrine\ORM\EntityManager $entityManager */
             $entityManager = $this->get('entity_manager');
             
-            /** @var \Caiofior\CatholicLiturgical\CalendarProperties $calendar */
-            $calendar = $entityManager->find('\Caiofior\CatholicLiturgical\CalendarProperties', ($request->getQueryParams()['calendario'] ?? 0));
-            if(!is_object($calendar)) {
-                $calendar = new \Caiofior\CatholicLiturgical\CalendarProperties();
-            }
-            
             $today = \DateTime::createFromFormat('Y-m-d', ($request->getQueryParams()['giorno']??''));
             if(!is_object($today)) {
                 $today = new \DateTime();
             }
+            $calendarId = (int)($request->getQueryParams()['calendario'] ?? 0);
+            if($calendarId == 0) {
+                $option = $entityManager->find('\Caiofior\Core\Option', 'default_calendar');
+                $calendarId = $option->getValue();
+            }
+            /** @var \Caiofior\CatholicLiturgical\CalendarProperties $calendar */
+            $calendar = $entityManager->find('\Caiofior\CatholicLiturgical\CalendarProperties', $calendarId);
+
+            $lithurgicCalendar = new \Caiofior\CatholicLiturgical\Calendar($today->format('Y-m-d'));           
             
             $queryBuilder = $entityManager
                     ->getConnection()
@@ -66,7 +71,7 @@ class Prey {
                     ->select('COUNT(*)')
                     ->from('prey')
                     ->fetchFirstColumn();
-            $total = $entityManager
+            $query = $entityManager
                     ->getConnection()
                     ->createQueryBuilder()
                     ->select('COUNT(*)')
@@ -84,9 +89,39 @@ class Prey {
                     'cp.profile_id = l.profile_id'
                     )
                     ->setFirstResult(($request->getQueryParams()['offset'] ?? 0))
-                    ->setMaxResults(($request->getQueryParams()['limit'] ?? 10))
-                    ->fetchFirstColumn();
+                    ->setMaxResults(($request->getQueryParams()['limit'] ?? 10));
+            if($calendar->getData()['lithurgicYear']==true) {
+                $query = $query->andWhere($queryBuilder->expr()->like('p.lithurgic_year', ':lithurgic_year'))
+                    ->setParameter('lithurgic_year', $lithurgicCalendar->getLithurgicYear());
+            }
+            if($calendar->getData()['lithurgicEve']==true) {
+                $query = $query->andWhere($queryBuilder->expr()->like('p.lithurgic_eve', ':lithurgic_eve'))
+                    ->setParameter('lithurgic_eve', $lithurgicCalendar->getDateTime()->getTime());
+                $query = $query->andWhere($queryBuilder->expr()->like('p.lithurgic_week', ':lithurgic_week'))
+                    ->setParameter('lithurgic_week', $lithurgicCalendar->getDateTime()->getWeekTimeNumber());
+            }
             
+            
+            $query = $query->orWhere($queryBuilder->expr()->like('p.today', ':today'))
+                    ->setParameter('today', $today->format('Y-m-d'));
+            
+            if(!empty($calendar->getData()['id'])) {
+            $query = $query
+                        ->andWhere(
+                                $queryBuilder->expr()->like('p.calendar_id', ':calendar')
+                        )
+                        ->setParameter('calendar', $calendar->getData()['id']);
+            }
+            if (!empty($request->getQueryParams()['search'])) {
+                $query = $query
+                        ->where(
+                                $queryBuilder->expr()->like('p.title', ':search')
+                        )
+                        ->setParameter('search', '%' . ($request->getQueryParams()['search'] ?? '') . '%');
+            }
+            
+            
+            $total = $query->fetchFirstColumn();
             
             $query = $entityManager
                     ->getConnection()
@@ -105,10 +140,25 @@ class Prey {
                     'l',
                     'cp.profile_id = l.profile_id'
                     )->groupBy('p.id');
-           
+            
+            if($calendar->getData()['lithurgicYear']==true) {
+                $query = $query->andWhere($queryBuilder->expr()->like('p.lithurgic_year', ':lithurgic_year'))
+                    ->setParameter('lithurgic_year', $lithurgicCalendar->getLithurgicYear());
+            }
+            if($calendar->getData()['lithurgicEve']==true) {
+                $query = $query->andWhere($queryBuilder->expr()->like('p.lithurgic_eve', ':lithurgic_eve'))
+                    ->setParameter('lithurgic_eve', $lithurgicCalendar->getDateTime()->getTime());
+                $query = $query->andWhere($queryBuilder->expr()->like('p.lithurgic_week', ':lithurgic_week'))
+                    ->setParameter('lithurgic_week', $lithurgicCalendar->getDateTime()->getWeekTimeNumber());
+            }
+            
+            
+            $query = $query->orWhere($queryBuilder->expr()->like('p.today', ':today'))
+                    ->setParameter('today', $today->format('Y-m-d'));
+            
             if(!empty($calendar->getData()['id'])) {
             $query = $query
-                        ->where(
+                        ->andWhere(
                                 $queryBuilder->expr()->like('p.calendar_id', ':calendar')
                         )
                         ->setParameter('calendar', $calendar->getData()['id']);
@@ -127,7 +177,6 @@ class Prey {
             $query = $query
                     ->setFirstResult(($request->getQueryParams()['offset'] ?? 0))
                     ->setMaxResults(($request->getQueryParams()['limit'] ?? 10));
-            
             
             $results = $query
                     ->fetchAllAssociative();
@@ -229,7 +278,7 @@ EOT;
                     $prey->setData($data);
                     $entityManager->persist($prey);
                     $entityManager->flush();
-                    return $response->withHeader('Location', $this->get('settings')['baseUrl'] . '/index.php/calendari/modifica/'.$data['calendar_id'])->withStatus(302);
+                    return $response->withHeader('Location', $this->get('settings')['baseUrl'] . '/index.php/preghiere/?calendario='.$request->getParsedBody()['calendar_id'].'&giorno='.$request->getParsedBody()['data'])->withStatus(302);
                 } catch (\Exception $e) {
                     throw $e;
                 }
