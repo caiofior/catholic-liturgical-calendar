@@ -11,13 +11,13 @@
                 </div> 
                 </p>
                 <p>
-                    <input type="hidden" name="today" value="<?= $today->format('Y-m-d'); ?>"/>
                     <a href="<?= $this->get('settings')['baseUrl'] ?>/index.php/preghiere?calendario=<?=$calendar->getData()['id']??null?>&giorno=<?= $previousDay->format('Y-m-d');?>" titile="<?= $previousDay->format('d/m/Y'); ?>">
                     <span class="icon-container">
                         <span class="ti-angle-left"></span>
                     </span>
                     </a>
-                    <span>                        
+                    <span>
+                        <input name="today" value="<?= $today->format('Y-m-d'); ?>"/>                        
                         <?= $dateFormatter->format($today); ?>
                     </span>
                     <a href="<?= $this->get('settings')['baseUrl'] ?>/index.php/preghiere?calendario=<?=$calendar->getData()['id']??null?>&giorno=<?= $nextDay->format('Y-m-d');?>" title="<?= $nextDay->format('d/m/Y'); ?>">

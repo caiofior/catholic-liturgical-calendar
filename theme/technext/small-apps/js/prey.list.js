@@ -7,6 +7,14 @@ window.operateEvents = {
     }
 };
 $("a.add").click(function (e) {
-        let url = $(this).attr("href")+"?calendario="+$("select[name=calendario] option:selected").attr("value"); 
+        let url = $(this).attr("href");
+        url += "?calendario="+$("select[name=calendario] option:selected").attr("value");
+        url += "&giorno="+$("input[name=today]").val(); 
         $(this).attr("href",url);
+});
+$("input[name=today], select[name=calendario]").change(function (e) {
+    let url = window.location.href;    
+    url += '?calendario='+$("select[name=calendario] option:selected").attr("value");
+    url += '&giorno='+$("input[name=today]").val();
+    window.location.href = url;
 });

@@ -108,7 +108,7 @@ EOT;
                 'rows' => $data
                     ], 201);
         });
-        $group->any('/modifica/[{id}]', function (Request $request, Response $response, $args) {
+        $group->any('/modifica[/{id}]', function (Request $request, Response $response, $args) {
             $theme = ($this->get('settings')['theme'] ?? '');
             /** @var \Doctrine\ORM\EntityManager $entityManager */
             $entityManager = $this->get('entity_manager');

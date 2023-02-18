@@ -6,3 +6,9 @@ tinymce.init({
     branding: false
 });
 
+$("input[name=today], select[name=calendario]").change(function (e) {
+    let url = window.location.href;    
+    url += '?calendario='+$("input[name=calendar_id]").val();
+    url += '&giorno='+$("input[name=today]").val();
+    window.location.href = url;
+});

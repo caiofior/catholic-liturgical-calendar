@@ -11,10 +11,10 @@
                     <?= $dateFormatter->format($today); ?>
                 </p>    
                 <p class="text-white mb-5">
-                    <?= $todayEve->getTimeDescritpion(); ?>                    
+                    <?= $todayEve->getTimeDescription(); ?>                    
                 </p>                
                 <p class="text-white mb-5">
-                    Periodo liturgico : <?= $todayEve->getTimeDescritpion(); ?>                    
+                    Periodo liturgico : <?= $todayEve->getTimeDescription(); ?>                    
                 </p>
                 <p class="text-white mb-5">
                     Settimana periodo liturgico : <?= $todayEve->getWeekTimeNumber(); ?>                    

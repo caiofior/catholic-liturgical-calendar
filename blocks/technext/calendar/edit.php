@@ -2,7 +2,7 @@
     <div class="col-12">
         <div class="icon-container">
             <h1 class="text-white font-weight-bold mb-4">Calendario
-                <?php if ($calendar->getData()['id'] > 0) : ?>
+                <?php if (($calendar->getData()['id']??0) > 0) : ?>
                     <a title="Aggiungi preghiera" href="<?= $this->get('settings')['baseUrl'] ?>/index.php/preghiere/modifica/?calendario=<?=$calendar->getData()['id']?>">
                         <span class="ti-plus"></span>
                     </a>
@@ -27,7 +27,7 @@
                             <span class="absolute">
                                 Predefinito
                             </span>
-                            <input style="" name="default" class="form-control modal-content" type="checkbox" <?= ((is_object ($option) && $option->getValue() == $calendar->getData()['id']) ? 'checked' : '') ?> value="1"/>
+                            <input style="" name="default" class="form-control modal-content" type="checkbox" <?= ((is_object ($option) && $option->getValue() == ($calendar->getData()['id']??0)) ? 'checked' : '') ?> value="1"/>
                         </p>
                     </div>
                     <div class="col-md-12 mb-2" >

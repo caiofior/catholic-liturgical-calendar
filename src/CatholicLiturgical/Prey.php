@@ -107,7 +107,6 @@ final class Prey implements \JsonSerializable {
                     break;
                 }
             }
-            
             switch ($attr['type']) {
                 case 'smallint':
                     $this->$field = 0;
@@ -121,12 +120,14 @@ final class Prey implements \JsonSerializable {
                     }
                     break;
                 default;
+                    $this->$field=null;
                     if (isset($data[$field])) {
                         $this->$field = $data[$field];
                     }
             }
             
         }
+        die();
     }
 
     /**

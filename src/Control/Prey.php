@@ -221,6 +221,17 @@ EOT;
                 $prey = $entityManager->find('\Caiofior\CatholicLiturgical\Prey', ($args['id']));
                 $calendar = $entityManager->find('\Caiofior\CatholicLiturgical\CalendarProperties', ($prey->getData()['calendar_id'] ?? 0));
             }
+            if (is_null($calendar)) {
+                
+                $id = $entityManager
+                    ->getConnection()
+                    ->createQueryBuilder()
+                    ->select('p.*')
+                    ->from('calendar_properties', 'p')
+                    ->fetchOne();
+                
+                $calendar = $entityManager->find('\Caiofior\CatholicLiturgical\CalendarProperties', $id);
+            }
             $today = \DateTime::createFromFormat('Y-m-d', ($request->getQueryParams()['giorno']??''));
             if(!is_object($today)) {
                 $today = new \DateTime();
@@ -278,7 +289,7 @@ EOT;
                     $prey->setData($data);
                     $entityManager->persist($prey);
                     $entityManager->flush();
-                    return $response->withHeader('Location', $this->get('settings')['baseUrl'] . '/index.php/preghiere/?calendario='.$request->getParsedBody()['calendar_id'].'&giorno='.$request->getParsedBody()['data'])->withStatus(302);
+                    return $response->withHeader('Location', $this->get('settings')['baseUrl'] . '/index.php/preghiere?calendario='.$request->getParsedBody()['calendar_id'].'&giorno='.$request->getParsedBody()['today'])->withStatus(302);
                 } catch (\Exception $e) {
                     throw $e;
                 }

@@ -14,14 +14,14 @@
             <div class="row">
                 <div class="col-md-12 mb-2">
                     <input type="hidden" name="calendar_id" value="<?=$calendar->getData()['id']?>"/>
-                    <input type="hidden" name="today" value="<?= $today->format('Y-m-d'); ?>"/>
                     <input type="checkbox" name="use_today"/>
                     <a href="<?= $this->get('settings')['baseUrl'] ?>/index.php/preghiere/modifica/?calendario=<?=$calendar->getData()['id']?>&giorno=<?= $previousDay->format('Y-m-d');?>" titile="<?= $previousDay->format('d/m/Y'); ?>">
                     <span class="icon-container">
                         <span class="ti-angle-left"></span>
                     </span>
                     </a>
-                    <span>                        
+                    <span>       
+                        <input name="today" value="<?= $today->format('Y-m-d'); ?>"/>
                         <?= $dateFormatter->format($today); ?>
                     </span>
                     <a href="<?= $this->get('settings')['baseUrl'] ?>/index.php/preghiere/modifica/?calendario=<?=$calendar->getData()['id']?>&giorno=<?= $nextDay->format('Y-m-d');?>" title="<?= $nextDay->format('d/m/Y'); ?>">
@@ -32,7 +32,7 @@
                 </div>
                 <div class="col-md-12 mb-2">
                     <input type="checkbox" name="use_lithurgic_eve" <?=($calendar->getData()['lithurgicEve']?'checked':''); ?>/>
-                    Periodo liturgico : <?= $todayEve->getTimeDescritpion(); ?>
+                    Periodo liturgico : <?= $todayEve->getTimeDescription(); ?>
                     <input type="hidden" name="lithurgic_eve" value="<?=$todayEve->getTime()?>"/>
                 </div>
                 <div class="col-md-12 mb-2">
