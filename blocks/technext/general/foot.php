@@ -1,7 +1,7 @@
 
   <!-- JAVASCRIPTS -->
   <script src="<?=$this->get('settings')['baseUrl'] ?>/node_modules/jquery/dist/jquery.min.js"></script>
-  <script src="<?=$this->get('settings')['baseUrl'] ?>/node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="<?=$this->get('settings')['baseUrl'] ?>/node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
   <script src="<?=$this->get('settings')['baseUrl'] ?>/node_modules/slick-carousel/slick/slick.min.js"></script>
   <script src="<?=$this->get('settings')['baseUrl'] ?>/node_modules/jquery-fancybox/source/js/jquery.fancybox.pack.js"></script>
   <script src="<?=$this->get('settings')['baseUrl'] ?>/node_modules/jquery-syotimer/build/jquery.syotimer.min.js"></script>
@@ -9,7 +9,7 @@
   <script src="<?=$this->get('settings')['baseUrl'] ?>/node_modules/bootstrap-table/dist/bootstrap-table.min.js"></script>
   <script src="<?=$this->get('settings')['baseUrl'] ?>/node_modules/bootstrap-table/dist/locale/bootstrap-table-it-IT.min.js"></script>
   <script src="<?=$this->get('settings')['baseUrl'] ?>/node_modules/bootstrap-table/dist/themes/bootstrap-table/bootstrap-table.min.js"></script>
-  <script src="<?=$this->get('settings')['baseUrl'] ?>/node_modules/popper.js/dist/popper.min.js"></script>
+  <script src="<?=$this->get('settings')['baseUrl'] ?>/node_modules/popper.js/dist/umd/popper.min.js"></script>
   <script src="<?=$this->get('settings')['baseUrl'] ?>/node_modules/bootbox/dist/bootbox.min.js"></script>
   <script src="<?=$this->get('settings')['baseUrl'] ?>/node_modules/bootbox/dist/bootbox.locales.min.js"></script>
       

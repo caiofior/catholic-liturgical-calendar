@@ -12,7 +12,12 @@ class Calendar {
    const weeksInYear = 52;
    private $calendar = [];
    private $inputDate = null ;
-   private $lithurgicYear =null;
+   private $lithurgicYear = null;
+   private $specialFest = [
+       '01-06'=>'Epiphany',
+       '01-08'=>'Jesus baptism',
+       '02-02'=>'Presentation in the Temple'
+   ];
    /**
     * Gets the liturgic calendar data of the required date
     * @param $dateTimeString
@@ -56,7 +61,7 @@ class Calendar {
       $easterDay = date('z',easter_date((int)$year));
       $date = new \DateTime('+'.$easterDay.' days 1 January '.$year);
       $easterWeek=(int)$date->format('W');
-      $lentDay=$easterDay-40;
+      $lentDay=$easterDay-42;
       $date = new \DateTime('+'.$lentDay.' days 1 January '.$year);
       $lentWeek=$date->format('W');
       
@@ -130,12 +135,27 @@ class Calendar {
                  ) {
             $times[$currentWeekTime]=1;
          }
+         if (
+                 $currentWeekTime == 'L' &&
+                 $times[$currentWeekTime] == 1
+                 ) {
+             
+                $ashWednesday = new \DateTime();
+                $ashWednesday->setTime(0, 0, 0);
+                $ashWednesday->setISODate($year, $weekNumber-1, 3);
+                $this->specialFest[$ashWednesday->format('m-d')]='Ash Wednesday';
+         }
          $week =new Week();
          $week->setTime($currentWeekTime);
          $week->setWeekTimeNumber($times[$currentWeekTime]++);
          $week->setWeekPsalterNumber($weekPsalterNumber[(int)$weekNumber]);
          $this->calendar[$weekNumber]=$week;
+
       }
+   }
+   
+   public function getSpecialFest() {
+       return $this->specialFest[$this->inputDate->format('m-d')]??false;
    }
 }
 

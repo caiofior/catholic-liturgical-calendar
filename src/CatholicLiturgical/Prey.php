@@ -39,6 +39,9 @@ final class Prey implements \JsonSerializable {
     #[Column(type: 'string', nullable: true)]
     private $lithurgic_eve ;
     
+    #[Column(type: 'string', nullable: true)]
+    private $special_fest ;
+    
     #[Column(type: 'integer', nullable: true)]
     private $lithurgic_week=0;
 
@@ -120,14 +123,14 @@ final class Prey implements \JsonSerializable {
                     }
                     break;
                 default;
-                    $this->$field=null;
+                    if($field=='today') {
+                        $this->$field=null;
+                    }
                     if (isset($data[$field])) {
                         $this->$field = $data[$field];
                     }
-            }
-            
+            }   
         }
-        die();
     }
 
     /**

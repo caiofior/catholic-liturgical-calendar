@@ -91,24 +91,31 @@ class Prey {
                     ->setFirstResult(($request->getQueryParams()['offset'] ?? 0))
                     ->setMaxResults(($request->getQueryParams()['limit'] ?? 10));
             if($calendar->getData()['lithurgicYear']==true) {
-                $query = $query->andWhere($queryBuilder->expr()->like('p.lithurgic_year', ':lithurgic_year'))
+                $query = $query->andWhere($queryBuilder->expr()->eq('p.lithurgic_year', ':lithurgic_year'))
                     ->setParameter('lithurgic_year', $lithurgicCalendar->getLithurgicYear());
             }
             if($calendar->getData()['lithurgicEve']==true) {
-                $query = $query->andWhere($queryBuilder->expr()->like('p.lithurgic_eve', ':lithurgic_eve'))
-                    ->setParameter('lithurgic_eve', $lithurgicCalendar->getDateTime()->getTime());
-                $query = $query->andWhere($queryBuilder->expr()->like('p.lithurgic_week', ':lithurgic_week'))
-                    ->setParameter('lithurgic_week', $lithurgicCalendar->getDateTime()->getWeekTimeNumber());
+                $query = $query->andWhere($queryBuilder->expr()->orX(
+                        $queryBuilder->expr()->andX(
+                                $queryBuilder->expr()->eq('p.lithurgic_eve', ':lithurgic_eve'),
+                                $queryBuilder->expr()->eq('p.lithurgic_week', ':lithurgic_week')
+                        ),
+                        $queryBuilder->expr()->eq('p.special_fest', ':special_fest')
+                        
+                ))
+                ->setParameter('lithurgic_eve', $lithurgicCalendar->getDateTime()->getTime())
+                ->setParameter('lithurgic_week', $lithurgicCalendar->getDateTime()->getWeekTimeNumber())
+                ->setParameter('special_fest', $lithurgicCalendar->getSpecialFest());
             }
             
             
-            $query = $query->orWhere($queryBuilder->expr()->like('p.today', ':today'))
+            $query = $query->orWhere($queryBuilder->expr()->eq('p.today', ':today'))
                     ->setParameter('today', $today->format('Y-m-d'));
             
             if(!empty($calendar->getData()['id'])) {
             $query = $query
                         ->andWhere(
-                                $queryBuilder->expr()->like('p.calendar_id', ':calendar')
+                                $queryBuilder->expr()->eq('p.calendar_id', ':calendar')
                         )
                         ->setParameter('calendar', $calendar->getData()['id']);
             }
@@ -142,24 +149,32 @@ class Prey {
                     )->groupBy('p.id');
             
             if($calendar->getData()['lithurgicYear']==true) {
-                $query = $query->andWhere($queryBuilder->expr()->like('p.lithurgic_year', ':lithurgic_year'))
+                $query = $query->andWhere($queryBuilder->expr()->eq('p.lithurgic_year', ':lithurgic_year'))
                     ->setParameter('lithurgic_year', $lithurgicCalendar->getLithurgicYear());
             }
             if($calendar->getData()['lithurgicEve']==true) {
-                $query = $query->andWhere($queryBuilder->expr()->like('p.lithurgic_eve', ':lithurgic_eve'))
-                    ->setParameter('lithurgic_eve', $lithurgicCalendar->getDateTime()->getTime());
-                $query = $query->andWhere($queryBuilder->expr()->like('p.lithurgic_week', ':lithurgic_week'))
-                    ->setParameter('lithurgic_week', $lithurgicCalendar->getDateTime()->getWeekTimeNumber());
+                $query = $query->andWhere($queryBuilder->expr()->orX(
+                        $queryBuilder->expr()->andX(
+                                $queryBuilder->expr()->eq('p.lithurgic_eve', ':lithurgic_eve'),
+                                $queryBuilder->expr()->eq('p.lithurgic_week', ':lithurgic_week')
+                        ),
+                        $queryBuilder->expr()->eq('p.special_fest', ':special_fest')
+                        
+                ))
+                ->setParameter('lithurgic_eve', $lithurgicCalendar->getDateTime()->getTime())
+                ->setParameter('lithurgic_week', $lithurgicCalendar->getDateTime()->getWeekTimeNumber())
+                ->setParameter('special_fest', $lithurgicCalendar->getSpecialFest());
+                            
             }
             
             
-            $query = $query->orWhere($queryBuilder->expr()->like('p.today', ':today'))
+            $query = $query->orWhere($queryBuilder->expr()->eq('p.today', ':today'))
                     ->setParameter('today', $today->format('Y-m-d'));
             
             if(!empty($calendar->getData()['id'])) {
             $query = $query
                         ->andWhere(
-                                $queryBuilder->expr()->like('p.calendar_id', ':calendar')
+                                $queryBuilder->expr()->eq('p.calendar_id', ':calendar')
                         )
                         ->setParameter('calendar', $calendar->getData()['id']);
             }
@@ -285,6 +300,9 @@ EOT;
                     }
                     if(!isset($data['use_today'])) {
                         unset($data['today']);
+                    }
+                    if(!isset($data['use_special_fest'])) {
+                        unset($data['special_fest']);
                     }
                     $prey->setData($data);
                     $entityManager->persist($prey);

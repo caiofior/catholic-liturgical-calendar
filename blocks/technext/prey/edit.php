@@ -30,6 +30,13 @@
                     </span>
                     </a>
                 </div>
+                <?php if($catholicCalendar->getSpecialFest() !== false) : ?>
+                <div class="col-md-12 mb-2">
+                    <input type="checkbox" name="use_special_fest"/>
+                    Festa : <?= $catholicCalendar->getSpecialFest(); ?>
+                    <input type="hidden" name="special_fest" value="<?= $catholicCalendar->getSpecialFest(); ?>"/>
+                </div>
+                <?php endif; ?>
                 <div class="col-md-12 mb-2">
                     <input type="checkbox" name="use_lithurgic_eve" <?=($calendar->getData()['lithurgicEve']?'checked':''); ?>/>
                     Periodo liturgico : <?= $todayEve->getTimeDescription(); ?>
