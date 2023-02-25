@@ -4,6 +4,7 @@ tinymce.init({
     language_url: '../tinymce-langs/langs/it.js',
     promotion: false,
     branding: false,
+    browser_spellcheck: true,
     plugins: 'charmap'
     
 });

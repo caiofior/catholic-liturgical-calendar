@@ -24,6 +24,7 @@
           <ul class="dropdown-menu">
             <li><a class="dropdown-item" href="<?=$this->get('settings')['baseUrl'] ?>/index.php/profilo">Profilo</a></li>
             <li><a class="dropdown-item" href="<?=$this->get('settings')['baseUrl'] ?>/index.php/password">Cambia password</a></li>
+            <li><a class="dropdown-item" href="<?=$this->get('settings')['baseUrl'] ?>/index.php/contenuti">Contenuti</a></li>
             <li><a class="dropdown-item" href="<?=$this->get('settings')['baseUrl'] ?>/index.php/calendari">Caledari</a></li>
             <li><a class="dropdown-item" href="<?=$this->get('settings')['baseUrl'] ?>/index.php/preghiere">Preghiere</a></li>
           </ul>

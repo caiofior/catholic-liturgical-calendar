@@ -198,17 +198,15 @@ class Prey {
             $data = array();
             array_walk($results, function ($value, $key) use (&$data) {
                 $data[$key] = json_decode(json_encode($value));
+                $approved= '';
                 if ($data[$key]->approved == true) {
-                    $data[$key]->approved = <<<EOT
-<div class="icon-container">
+                    $approved = <<<EOT
      <span class="ti-check"></span>
-</div>
 EOT;
-                } else {
-                    $data[$key]->approved = '';
                 }
                 $data[$key]->actions = <<<EOT
 <div class="icon-container">
+    {$approved}
     <a href="{$this->get('settings')['baseUrl']}/index.php/preghiere/modifica/{$data[$key]->id}">
         <span class="ti-pencil"></span>
     </a>

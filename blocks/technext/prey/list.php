@@ -52,7 +52,7 @@
                             <th data-sortable="true" data-field="reference">Riferimento</th>
                             <th data-sortable="true" data-field="sort">Ordine</th>
                             <th data-sortable="true" data-field="hour">Ora</th>
-                            <th data-sortable="true" data-field="approved">Approvato</th>
+                            <th data-sortable="true" data-field="special_fest">Festività</th>
                             <th data-events="operateEvents" data-field="actions"></th>
                         </tr>
                     </thead>

@@ -161,6 +161,9 @@ $app->any('/index.php/password', function (Request $request, Response $response,
     }
     return $response;
 });
+$app->group('/index.php/contenuti', function (RouteCollectorProxy $group) {
+    return \Caiofior\Control\Contents::parse($group);
+});
 $app->group('/index.php/calendari', function (RouteCollectorProxy $group) {
     return \Caiofior\Control\CalendarProperties::parse($group);
 });

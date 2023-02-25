@@ -34,5 +34,13 @@
   <script src="<?=$this->get('settings')['baseUrl'] ?>/node_modules/tinymce/tinymce.min.js"></script>
   <script src="<?=$this->get('settings')['baseUrl'] ?>/node_modules/tinymce-langs/langs/it.js"></script>
   <script src="<?=$this->get('settings')['baseUrl'] ?>/theme/technext/small-apps/js/prey.add.js"></script>
-   <?php break;
-   endswitch; ?>
+  <?php break;
+        case 'content' : ?>
+  <script src="<?=$this->get('settings')['baseUrl'] ?>/theme/technext/small-apps/js/content.list.js"></script>
+  <?php break;
+        case 'content/add' : ?>
+  <script src="<?=$this->get('settings')['baseUrl'] ?>/node_modules/tinymce/tinymce.min.js"></script>
+  <script src="<?=$this->get('settings')['baseUrl'] ?>/node_modules/tinymce-langs/langs/it.js"></script>
+  <script src="<?=$this->get('settings')['baseUrl'] ?>/theme/technext/small-apps/js/content.add.js"></script>
+  <?php break;
+   endswitch; 
