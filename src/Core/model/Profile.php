@@ -1,6 +1,6 @@
 <?php
 declare(strict_types=1);
-namespace Caiofior\Core;
+namespace Caiofior\Core\model;
 
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping\Column;

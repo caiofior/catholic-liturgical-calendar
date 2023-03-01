@@ -24,11 +24,11 @@ class Prey {
             $dateFormatter = $this->get('date_formatter');
             $calendarId = (int)($request->getQueryParams()['calendario'] ?? 0);
             if($calendarId == 0) {
-                $option = $entityManager->find('\Caiofior\Core\Option', 'default_calendar');
+                $option = $entityManager->find('\Caiofior\Core\model\Option', 'default_calendar');
                 $calendarId = $option->getValue();
             }
-            /** @var \Caiofior\CatholicLiturgical\CalendarProperties $calendar */
-            $calendar = $entityManager->find('\Caiofior\CatholicLiturgical\CalendarProperties', $calendarId);
+            /** @var \Caiofior\CatholicLiturgical\model\CalendarProperties $calendar */
+            $calendar = $entityManager->find('\Caiofior\CatholicLiturgical\model\CalendarProperties', $calendarId);
             
             $today = \DateTime::createFromFormat('Y-m-d', ($request->getQueryParams()['giorno']??''));
             if(!is_object($today)) {
@@ -56,11 +56,11 @@ class Prey {
             }
             $calendarId = (int)($request->getQueryParams()['calendario'] ?? 0);
             if($calendarId == 0) {
-                $option = $entityManager->find('\Caiofior\Core\Option', 'default_calendar');
+                $option = $entityManager->find('\Caiofior\Core\model\Option', 'default_calendar');
                 $calendarId = $option->getValue();
             }
-            /** @var \Caiofior\CatholicLiturgical\CalendarProperties $calendar */
-            $calendar = $entityManager->find('\Caiofior\CatholicLiturgical\CalendarProperties', $calendarId);
+            /** @var \Caiofior\CatholicLiturgical\model\CalendarProperties $calendar */
+            $calendar = $entityManager->find('\Caiofior\CatholicLiturgical\model\CalendarProperties', $calendarId);
 
             $lithurgicCalendar = new \Caiofior\CatholicLiturgical\Calendar($today->format('Y-m-d'));           
             
@@ -226,13 +226,13 @@ EOT;
             
             $entityManager = $this->get('entity_manager');
             $dateFormatter = $this->get('date_formatter');
-            /** @var \Caiofior\CatholicLiturgical\CalendarProperties $calendar */
-            $calendar = $entityManager->find('\Caiofior\CatholicLiturgical\CalendarProperties', ($request->getQueryParams()['calendario'] ?? 0));
+            /** @var \Caiofior\CatholicLiturgical\model\CalendarProperties $calendar */
+            $calendar = $entityManager->find('\Caiofior\CatholicLiturgical\model\CalendarProperties', ($request->getQueryParams()['calendario'] ?? 0));
             /** @var \Caiofior\CatholicLiturgical\Prey $prey */
-            $prey = new \Caiofior\CatholicLiturgical\Prey();
+            $prey = new \Caiofior\CatholicLiturgical\model\Prey();
             if (!empty($args['id'])) {
-                $prey = $entityManager->find('\Caiofior\CatholicLiturgical\Prey', ($args['id']));
-                $calendar = $entityManager->find('\Caiofior\CatholicLiturgical\CalendarProperties', ($prey->getData()['calendar_id'] ?? 0));
+                $prey = $entityManager->find('\Caiofior\CatholicLiturgical\model\Prey', ($args['id']));
+                $calendar = $entityManager->find('\Caiofior\CatholicLiturgical\model\CalendarProperties', ($prey->getData()['calendar_id'] ?? 0));
             }
             if (is_null($calendar)) {
                 
@@ -243,7 +243,7 @@ EOT;
                     ->from('calendar_properties', 'p')
                     ->fetchOne();
                 
-                $calendar = $entityManager->find('\Caiofior\CatholicLiturgical\CalendarProperties', $id);
+                $calendar = $entityManager->find('\Caiofior\CatholicLiturgical\model\CalendarProperties', $id);
             }
             $today = \DateTime::createFromFormat('Y-m-d', ($request->getQueryParams()['giorno']??''));
             if(!is_object($today)) {
@@ -262,14 +262,14 @@ EOT;
             $entityManager = $this->get('entity_manager');
             $message = '';
             $page = 'prey/add';
-            /** @var \Caiofior\Core\Login $login */
-            $login = $entityManager->find('\Caiofior\Core\Login', ($_SESSION['username'] ?? ''));
-            /** @var \Caiofior\Core\Profile $profile */
-            $profile = $entityManager->find('\Caiofior\Core\Profile', ($login->getProfileId() ?? null));
-            /** @var \Caiofior\Core\Role $role */
-            $role = $entityManager->find('\Caiofior\Core\Role', ($profile->getRoleId() ?? null));
-            /** @var \Caiofior\Core\Option $option */
-            $option = $entityManager->find('\Caiofior\Core\Option', 'default_calendar');
+            /** @var \Caiofior\Core\model\Login $login */
+            $login = $entityManager->find('\Caiofior\Core\model\Login', ($_SESSION['username'] ?? ''));
+            /** @var \Caiofior\Core\model\Profile $profile */
+            $profile = $entityManager->find('\Caiofior\Core\model\Profile', ($login->getProfileId() ?? null));
+            /** @var \Caiofior\Core\model\Role $role */
+            $role = $entityManager->find('\Caiofior\Core\model\Role', ($profile->getRoleId() ?? null));
+            /** @var \Caiofior\Core\model\Option $option */
+            $option = $entityManager->find('\Caiofior\Core\model\Option', 'default_calendar');
             if (!is_object($option)) {
                 $option = new \Caiofior\Core\Option();
                 $option->setOption('default_calendar');
@@ -321,7 +321,7 @@ EOT;
             $entityManager = $this->get('entity_manager');
             $message = '';
             $page = 'calendar/add';
-            $prey = $entityManager->find('\Caiofior\CatholicLiturgical\Prey', $args['id']);
+            $prey = $entityManager->find('\Caiofior\CatholicLiturgical\model\Prey', $args['id']);
             $entityManager->remove($prey);
             $entityManager->flush();
             return $response->withHeader('Location', $this->get('settings')['baseUrl'] . '/index.php/preghiere')->withStatus(302);

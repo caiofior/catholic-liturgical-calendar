@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Caiofior\Core;
+namespace Caiofior\CatholicLiturgical\model;
 
 use Doctrine\DBAL\Types\Type;
 use DateTimeImmutable;
@@ -12,40 +12,73 @@ use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\Table;
 
+Type::addType('point', 'CrEOF\Spatial\DBAL\Types\Geometry\PointType');
 /**
  * Description of Calendar Properties
  *
  * @author caiofior
  */
-#[Entity, Table(name: 'content')]
-final class Content implements \JsonSerializable {
+#[Entity, Table(name: 'prey')]
+final class Prey implements \JsonSerializable {
 
     #[Id, Column(type: 'integer', unique: true, nullable: false), GeneratedValue]
     private int $id;
 
+    #[Column(type: 'integer', nullable: false)]
+    private int $calendar_id;
+
     #[Column(type: 'smallint', nullable: false, options: ["default" => 0])]
     private int $approved = 0;
-    
-    #[Column(type: 'smallint', nullable: false, options: ["default" => 0])]
-    private int $deletable = 0;
 
     #[Column(type: 'datetimetz_immutable', nullable: true)]
     private DateTimeImmutable $creation;
+
+    #[Column(type: 'string', nullable: true)]
+    private $lithurgic_year;
+
+    #[Column(type: 'string', nullable: true)]
+    private $lithurgic_eve ;
+    
+    #[Column(type: 'string', nullable: true)]
+    private $special_fest ;
+    
+    #[Column(type: 'integer', nullable: true)]
+    private $lithurgic_week=0;
+
+    #[Column(type: 'integer', nullable: true)]
+    private $salter_week=0;
     
     #[Column(type: 'datetimetz_immutable', nullable: true)]
-    private DateTimeImmutable $modify;
+    private $today;
+    
+    #[Column(type: 'integer', nullable: true)]
+    private $day_of_year ;
+    
+    #[Column(type: 'integer', nullable: true)]
+    private $day_of_week ;
+    
+    #[Column(type: 'integer', nullable: true)]
+    private $hour ;
     
     #[Column(type: 'integer', nullable: true)]
     private $sort ;
-    
-    #[Column(type: 'string', nullable: true)]
-    private $code ;
 
     #[Column(type: 'string', nullable: true)]
     private $title ;
-       
+    
+    #[Column(type: 'string', nullable: true)]
+    private $reference ;
+    
     #[Column(type: 'text', nullable: true)]
-    private $content;  
+    private $content;
+    
+    #[Column(type: 'point', nullable: true)]
+    private $place;
+    
+    public function __construct() {
+        $this->today = new DateTimeImmutable();
+    }
+    
 
     /**
      * Get id
@@ -53,6 +86,13 @@ final class Content implements \JsonSerializable {
      */
     public function getId() : int {
         return $this->id;
+    }
+    /**
+     * Returns calendar id
+     * @return int
+     */
+    public function getCalendarId() : int {
+        return $this->calendar_id;
     }
 
     /**

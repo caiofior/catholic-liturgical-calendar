@@ -14,6 +14,7 @@ class Calendar {
    private $inputDate = null ;
    private $lithurgicYear = null;
    private $specialFest = [
+       '01-01'=>'Holy Mother of God',
        '01-06'=>'Epiphany',
        '01-08'=>'Jesus baptism',
        '02-02'=>'Presentation in the Temple'

@@ -36,11 +36,11 @@ $app->any('/index.php/login', function (Request $request, Response $response, $a
     $page = 'login';
     if (isset($request->getParsedBody()['register'])) {
         $entityManager->beginTransaction();
-        $profile = new \Caiofior\Core\Profile();
+        $profile = new \Caiofior\Core\model\Profile();
         $profile->setRoleId(3);
         $entityManager->persist($profile);
         $entityManager->flush();
-        $login = new \Caiofior\Core\Login();
+        $login = new \Caiofior\Core\model\Login();
         try {
             $login->setUsername($request->getParsedBody()['username']);
             if ($request->getParsedBody()['password'] != $request->getParsedBody()['ripeti_password']) {
@@ -72,8 +72,8 @@ $app->any('/index.php/login', function (Request $request, Response $response, $a
         $entityManager->commit();
     }
     if (isset($request->getParsedBody()['login'])) {
-        /** @var \Caiofior\Core\Login $login */
-        $login = $entityManager->find('\Caiofior\Core\Login', $request->getParsedBody()['username']);
+        /** @var \Caiofior\Core\model\Login $login */
+        $login = $entityManager->find('\Caiofior\Core\model\Login', $request->getParsedBody()['username']);
         if (is_object($login)) {
             try {
                 $login->checkPassword($request->getParsedBody()['password']);
@@ -113,13 +113,13 @@ $app->any('/index.php/profilo', function (Request $request, Response $response, 
     $entityManager = $this->get('entity_manager');
     $message = '';
     $page = 'profile';
-    $login = $entityManager->find('\Caiofior\Core\Login', $_SESSION['username']);
-    $profile = $entityManager->find('\Caiofior\Core\Profile', $login->getProfileId());
+    $login = $entityManager->find('\Caiofior\Core\model\Login', $_SESSION['username']);
+    $profile = $entityManager->find('\Caiofior\Core\model\Profile', $login->getProfileId());
     if (isset($request->getParsedBody()['salva'])) {
         $profile->setData($request->getParsedBody());
         $entityManager->persist($profile);
         $entityManager->flush();
-        $profile = $entityManager->find('\Caiofior\Core\Profile', $login->getProfileId());
+        $profile = $entityManager->find('\Caiofior\Core\model\Profile', $login->getProfileId());
         $page = '';
     }
     if (!empty($theme)) {
@@ -133,7 +133,7 @@ $app->any('/index.php/password', function (Request $request, Response $response,
     $entityManager = $this->get('entity_manager');
     $message = '';
     $page = 'password';
-    $login = $entityManager->find('\Caiofior\Core\Login', $_SESSION['username']);
+    $login = $entityManager->find('\Caiofior\Core\model\Login', $_SESSION['username']);
     if (isset($request->getParsedBody()['salva'])) {
         try {
             if ($request->getParsedBody()['password'] != $request->getParsedBody()['ripeti_password']) {

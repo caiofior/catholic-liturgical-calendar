@@ -27,8 +27,8 @@
                     </a>
                     <select name="calendario">
                     <?php
-                    $calendarColl = $entityManager->getRepository('\Caiofior\CatholicLiturgical\CalendarProperties')->findAll();
-                    /** @var \Caiofior\CatholicLiturgical\CalendarProperties $calendarItem */
+                    $calendarColl = $entityManager->getRepository('\Caiofior\CatholicLiturgical\model\CalendarProperties')->findAll();
+                    /** @var \Caiofior\CatholicLiturgical\model\CalendarProperties $calendarItem */
                     foreach ($calendarColl as $calendarItem) :
                         $checked = '';
                         if($calendarItem->getData()['id'] == $calendar->getData()['id']) {

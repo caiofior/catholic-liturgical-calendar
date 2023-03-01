@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Caiofior\CatholicLiturgical;
+namespace Caiofior\CatholicLiturgical\model;
 
 use DateTimeImmutable;
 use Doctrine\ORM\Mapping\Column;
