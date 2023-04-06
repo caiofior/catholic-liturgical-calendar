@@ -3,21 +3,26 @@ declare(strict_types=1);
 namespace Caiofior\CatholicLiturgical;
 /**
  * Creates and rertives data of a chatolic lithurgic calendar
- * @author Claufio Fior caiofior@gmail.com
+ * @author Claudio Fior caiofior@gmail.com
  */
 class Calendar {
    /**
     * Weeks in year
     */
-   const weeksInYear = 52;
+   const weeksInYear = 53;
    private $calendar = [];
    private $inputDate = null ;
    private $lithurgicYear = null;
    private $specialFest = [
+       '12-08'=>'Immaculate Conception',
+       '12-25'=>'Christmas',
+       '12-30'=>'Holy Family',
        '01-01'=>'Holy Mother of God',
        '01-06'=>'Epiphany',
        '01-08'=>'Jesus baptism',
-       '02-02'=>'Presentation in the Temple'
+       '02-02'=>'Presentation in the Temple',
+       '03-19'=>'Saint Joseph',
+       '03-25'=>'Saint Annunciation',
    ];
    /**
     * Gets the liturgic calendar data of the required date
@@ -62,10 +67,9 @@ class Calendar {
       $easterDay = date('z',easter_date((int)$year));
       $date = new \DateTime('+'.$easterDay.' days 1 January '.$year);
       $easterWeek=(int)$date->format('W');
-      $lentDay=$easterDay-42;
+      $lentDay=$easterDay-35;
       $date = new \DateTime('+'.$lentDay.' days 1 January '.$year);
-      $lentWeek=$date->format('W');
-      
+      $lentWeek=(int)$date->format('W');
       for($c = $lentWeek; $c <$easterWeek; $c++) {
          $weekTime[$c]='L';
       }
@@ -76,12 +80,14 @@ class Calendar {
       for($c = $easterWeek+1; $c <$pentecostWeek; $c++) {
          $weekTime[$c]='E';
       }
-      
       $date = new \DateTime('26 November '.$year);
-      $adventWeek = $date->format('W');
+      $adventWeek = $date->format('W')+1;
       
       $moduleYear = $year % 3;
-      if ($this->inputDate->format('W') > $adventWeek) {
+      if (
+              $this->inputDate->format('W') > $adventWeek && 
+              $this->inputDate->format('z') > 5
+              ) {
           $moduleYear +=1;
       }
       if ($moduleYear>2) {
@@ -98,9 +104,8 @@ class Calendar {
               $this->lithurgicYear = 'B';
           break;
       }
-      
       $date = new \DateTime('25 December '.$year);
-      $christmasWeek = $date->format('W');
+      $christmasWeek = $date->format('W')+1;
       
       for($c = $adventWeek; $c <$christmasWeek; $c++) {
          $weekTime[$c]='A';
@@ -146,12 +151,48 @@ class Calendar {
                 $ashWednesday->setISODate($year, $weekNumber-1, 3);
                 $this->specialFest[$ashWednesday->format('m-d')]='Ash Wednesday';
          }
+         if (
+                 $currentWeekTime == 'T' &&
+                 $times[$currentWeekTime] == 1
+                 ) {
+             
+                $palmSunday = new \DateTime();
+                $palmSunday->setTime(0, 0, 0);
+                $palmSunday->setISODate($year, $weekNumber, 0);
+                $this->specialFest[$palmSunday->format('m-d')]='Palm Sunday';
+                
+                $holyThurday = new \DateTime();
+                $holyThurday->setTime(0, 0, 0);
+                $holyThurday->setISODate($year, $weekNumber, 4);
+                $this->specialFest[$holyThurday->format('m-d')]='Holy Thursday';
+                
+                $goodFriday = new \DateTime();
+                $goodFriday->setTime(0, 0, 0);
+                $goodFriday->setISODate($year, $weekNumber, 5);
+                $this->specialFest[$goodFriday->format('m-d')]='Good Friday';
+                
+                $holySatuday = new \DateTime();
+                $holySatuday->setTime(0, 0, 0);
+                $holySatuday->setISODate($year, $weekNumber, 6);
+                $this->specialFest[$holySatuday->format('m-d')]='Holy Saturday';
+                
+         }
+         if (
+                 $currentWeekTime == 'E' &&
+                 $times[$currentWeekTime] == 1
+                 ) {
+                
+                $easterMonday = new \DateTime();
+                $easterMonday->setTime(0, 0, 0);
+                $easterMonday->setISODate($year, $weekNumber, 1);
+                $this->specialFest[$easterMonday->format('m-d')]='Easter Monday';
+                                
+         }
          $week =new Week();
          $week->setTime($currentWeekTime);
          $week->setWeekTimeNumber($times[$currentWeekTime]++);
          $week->setWeekPsalterNumber($weekPsalterNumber[(int)$weekNumber]);
          $this->calendar[$weekNumber]=$week;
-
       }
    }
    

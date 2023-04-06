@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping\Table;
  *
  * @author caiofior
  */
-#[Entity, Table(name: 'option')]
+#[Entity, Table(name: 'options')]
 final class Option {
     #[Id, Column(type: 'string', unique: true, nullable: false)]
     private string $option;

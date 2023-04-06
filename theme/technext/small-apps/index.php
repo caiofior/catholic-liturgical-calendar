@@ -108,7 +108,7 @@ $content = $query->fetchAssociative();
 			<div class="col-lg-6 ml-auto justify-content-center">
 				<!-- Feature Mockup -->
 				<div class="image-content" data-aos="fade-right">
-					<img class="img-fluid" src="<?=$this->get('settings')['baseUrl'] ?>/vendor/technext/small-apps/images/feature/feature-new-01.jpg" alt="iphone">
+					<img class="img-fluid" src="<?=$this->get('settings')['baseUrl'] ?>/theme/technext/small-apps/images/religiosita.png" alt="iphone">
 				</div>
 			</div>
 			<div class="col-lg-6 mr-auto align-self-center">
@@ -132,7 +132,7 @@ $content = $query->fetchAssociative();
       <div class="row">
         <div class="col-lg-4 col-md-12 m-md-auto align-self-center">
           <div class="block">
-            <a href="index.html"><img src="<?=$this->get('settings')['baseUrl'] ?>/vendor/technext/small-apps/images/logo-alt.png" alt="footer-logo"></a>
+            <a href="index.html"><img src="<?=$this->get('settings')['baseUrl'] ?>/theme/technext/small-apps/images/logo-alt.png" alt="footer-logo"></a>
             <!-- Social Site Icons -->
             <ul class="social-icon list-inline">
               <li class="list-inline-item">

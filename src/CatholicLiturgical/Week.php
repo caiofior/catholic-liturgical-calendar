@@ -31,7 +31,7 @@ class Week {
         'C'=>'Natale',
         'A'=>'Avvento',
         'L'=>'Quaresima',
-        'P'=>'Pasqua',
+        'E'=>'Pasqua',
         'T'=>'Settimana santa',
         'O'=>'Ordinario'
     ];

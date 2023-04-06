@@ -133,7 +133,7 @@ class Prey {
             $query = $entityManager
                     ->getConnection()
                     ->createQueryBuilder()
-                    ->select('p.*', 'l.username')
+                    ->select('p.*', 'GROUP_CONCAT(l.username) AS username')
                     ->from('prey', 'p')
                     ->leftJoin(
                     'p',
@@ -147,7 +147,6 @@ class Prey {
                     'l',
                     'cp.profile_id = l.profile_id'
                     )->groupBy('p.id');
-            
             if($calendar->getData()['lithurgicYear']==true) {
                 $query = $query->andWhere($queryBuilder->expr()->eq('p.lithurgic_year', ':lithurgic_year'))
                     ->setParameter('lithurgic_year', $lithurgicCalendar->getLithurgicYear());
@@ -164,7 +163,6 @@ class Prey {
                 ->setParameter('lithurgic_eve', $lithurgicCalendar->getDateTime()->getTime())
                 ->setParameter('lithurgic_week', $lithurgicCalendar->getDateTime()->getWeekTimeNumber())
                 ->setParameter('special_fest', $lithurgicCalendar->getSpecialFest());
-                            
             }
             
             
@@ -192,11 +190,10 @@ class Prey {
             $query = $query
                     ->setFirstResult(($request->getQueryParams()['offset'] ?? 0))
                     ->setMaxResults(($request->getQueryParams()['limit'] ?? 10));
-            
             $results = $query
                     ->fetchAllAssociative();
             $data = array();
-            array_walk($results, function ($value, $key) use (&$data) {
+            array_walk($results, function ($value, $key) use (&$data,$today) {
                 $data[$key] = json_decode(json_encode($value));
                 $approved= '';
                 if ($data[$key]->approved == true) {
@@ -207,7 +204,7 @@ EOT;
                 $data[$key]->actions = <<<EOT
 <div class="icon-container">
     {$approved}
-    <a href="{$this->get('settings')['baseUrl']}/index.php/preghiere/modifica/{$data[$key]->id}">
+    <a href="{$this->get('settings')['baseUrl']}/index.php/preghiere/modifica/{$data[$key]->id}?giorno={$today->format('Y-m-d')}">
         <span class="ti-pencil"></span>
     </a>
     <a class="trash" href="{$this->get('settings')['baseUrl']}/index.php/preghiere/cancella/{$data[$key]->id}">
@@ -226,6 +223,14 @@ EOT;
             
             $entityManager = $this->get('entity_manager');
             $dateFormatter = $this->get('date_formatter');
+            $today = \DateTime::createFromFormat('Y-m-d', ($request->getQueryParams()['giorno']??''));
+            if(!is_object($today)) {
+                $today = new \DateTime();
+            }
+            $previousDay = clone $today;
+            $previousDay = $previousDay->sub(new \DateInterval('P1D'));
+            $nextDay = clone $today;
+            $nextDay = $nextDay->add(new \DateInterval('P1D'));
             /** @var \Caiofior\CatholicLiturgical\model\CalendarProperties $calendar */
             $calendar = $entityManager->find('\Caiofior\CatholicLiturgical\model\CalendarProperties', ($request->getQueryParams()['calendario'] ?? 0));
             /** @var \Caiofior\CatholicLiturgical\Prey $prey */
@@ -245,14 +250,7 @@ EOT;
                 
                 $calendar = $entityManager->find('\Caiofior\CatholicLiturgical\model\CalendarProperties', $id);
             }
-            $today = \DateTime::createFromFormat('Y-m-d', ($request->getQueryParams()['giorno']??''));
-            if(!is_object($today)) {
-                $today = new \DateTime();
-            }
-            $previousDay = clone $today;
-            $previousDay = $previousDay->sub(new \DateInterval('P1D'));
-            $nextDay = clone $today;
-            $nextDay = $nextDay->add(new \DateInterval('P1D'));
+
             /** @var \Caiofior\CatholicLiturgical\Calendar $calendar */
             $catholicCalendar = new \Caiofior\CatholicLiturgical\Calendar($today->format('Y-m-d'));
             $todayEve = $catholicCalendar->getDateTime();

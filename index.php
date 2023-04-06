@@ -170,4 +170,14 @@ $app->group('/index.php/calendari', function (RouteCollectorProxy $group) {
 $app->group('/index.php/preghiere', function (RouteCollectorProxy $group) {
     return \Caiofior\Control\Prey::parse($group);
 });
-$app->run();
+try {
+    $app->run();
+} catch(\Slim\Exception\HttpNotFoundException $e )  {
+    $error = 'Errata configurazione dei percorsi';
+    require __DIR__.'/theme/technext/small-apps/error.php';
+    exit;
+} catch (\Doctrine\DBAL\Exception\ConnectionException $e) {
+    $error = 'Errata configurazione del database';
+    require __DIR__.'/theme/technext/small-apps/error.php';
+    exit;
+}

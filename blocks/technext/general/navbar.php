@@ -1,6 +1,6 @@
 <nav class="navbar main-nav navbar-expand-lg px-2 px-sm-0 py-2 py-lg-0">
   <div class="container">
-    <a class="navbar-brand" href="index.html"><img src="<?=$this->get('settings')['baseUrl'] ?>/vendor/technext/small-apps/images/logo.png" alt="logo"></a>
+    <a class="navbar-brand" href="<?=$this->get('settings')['baseUrl'] ?>"><img src="<?=$this->get('settings')['baseUrl'] ?>/theme/technext/small-apps/images/logo.png" alt="logo"></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
       aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="ti-menu"></span>

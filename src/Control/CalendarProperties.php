@@ -114,20 +114,21 @@ EOT;
             $entityManager = $this->get('entity_manager');
             $message = '';
             $page = 'calendar/add';
-            $calendar = new \Caiofior\CatholicLiturgical\CalendarProperties();
+            /** @var \Caiofior\CatholicLiturgical\model\CalendarProperties $calendar */
+            $calendar = new \Caiofior\CatholicLiturgical\model\CalendarProperties();
             if (!empty($args['id'])) {
-                $calendar = $entityManager->find('\Caiofior\CatholicLiturgical\CalendarProperties', $args['id']);
+                $calendar = $entityManager->find('\Caiofior\CatholicLiturgical\model\CalendarProperties', $args['id']);
             }
-            /** @var \Caiofior\Core\Login $login */
+            /** @var \Caiofior\Core\model\Login $login */
             $login = $entityManager->find('\Caiofior\Core\Login', ($_SESSION['username'] ?? ''));
-            /** @var \Caiofior\Core\Profile $profile */
+            /** @var \Caiofior\Core\model\Profile $profile */
             $profile = $entityManager->find('\Caiofior\Core\Profile', ($login->getProfileId() ?? null));
-            /** @var \Caiofior\Core\Role $role */
+            /** @var \Caiofior\Core\model\Role $role */
             $role = $entityManager->find('\Caiofior\Core\Role', ($profile->getRoleId() ?? null));
-            /** @var \Caiofior\Core\Option $option */
-            $option = $entityManager->find('\Caiofior\Core\Option', 'default_calendar');
+            /** @var \Caiofior\Core\model\Option $option */
+            $option = $entityManager->find('\Caiofior\Core\model\Option', 'default_calendar');
             if (!is_object($option)) {
-                $option = new \Caiofior\Core\Option();
+                $option = new \Caiofior\Core\model\Option();
                 $option->setOption('default_calendar');
             }
             if (isset($request->getParsedBody()['salva'])) {

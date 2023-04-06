@@ -8,7 +8,7 @@ $basePath = '/~caiofior/catholic-liturgical-calendar';
 // Settings
 $settings = [
     'basePath' => $basePath,
-    'baseUrl' => 'http://' . ($_SERVER['SERVER_NAME'] ?? '') . $basePath,
+    'baseUrl' => ($_SERVER['HTTPS']??'' == 'on' ? 'https':'http').'://' . ($_SERVER['SERVER_NAME'] ?? '') . $basePath,
     'theme' => 'technext/small-apps',
     'siteName' => 'Calendario liturgico',
     'locale' => 'it_IT',
@@ -32,7 +32,7 @@ $settings = [
             'driver' => 'pdo_mysql',
             'host' => '127.0.0.1',
             'port' => 3306,
-            'dbname' => 'catholic_liturgic',
+            'dbname' => 'precesit69987',
             'user' => 'caiofior',
             'password' => 'topolino',
             'charset' => 'UTF8',
@@ -42,6 +42,5 @@ $settings = [
         ]
     ]
 ];
-
 // ...
 return $settings;
