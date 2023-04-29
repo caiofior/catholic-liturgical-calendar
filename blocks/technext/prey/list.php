@@ -27,22 +27,32 @@
                     </a>
                     <select name="calendario">
                     <?php
+                    $calendarId = (int)($request->getQueryParams()['calendario'] ?? 0);
+                    if ($calendarId == 0) {
+                        /** @var \Caiofior\Core\model\Option $option */
+                        $option = $entityManager->find('\Caiofior\Core\model\Option', 'default_calendar');
+                        if (!is_object($option)) {
+                            $option = new \Caiofior\Core\model\Option();
+                            $option->setOption('default_calendar');
+                        }
+                        $calendarId = $option->getValue();
+                    }
                     $calendarColl = $entityManager->getRepository('\Caiofior\CatholicLiturgical\model\CalendarProperties')->findAll();
                     /** @var \Caiofior\CatholicLiturgical\model\CalendarProperties $calendarItem */
                     foreach ($calendarColl as $calendarItem) :
-                        $checked = '';
-                        if($calendarItem->getData()['id'] == $calendar->getData()['id']) {
-                            $checked = ' checked ';
+                        $selected = '';
+                        if($calendarItem->getData()['id'] == $calendarId) {
+                            $selected = ' selected ';
                         }
                         ?>
-                        <option <?=$checked?> value="<?=$calendarItem->getData()['id'];?>"><?=$calendarItem->getData()['name'];?></option>
+                        <option <?=$selected?> value="<?=$calendarItem->getData()['id'];?>"><?=$calendarItem->getData()['name'];?></option>
                     <?php endforeach; ?>
                     </select>
                 </p>
                 <table
                     data-toggle="table"
                     data-locale="it"
-                    data-url="preghiere/list?calendar=<?=$calendar->getData()['id']?>&giorno=<?=$today->format('Y-m-d');?>"
+                    data-url="preghiere/list?calendario=<?=$calendar->getData()['id']?>&giorno=<?=$today->format('Y-m-d');?>"
                     data-side-pagination="server"
                     data-pagination="true"
                     data-search="true">

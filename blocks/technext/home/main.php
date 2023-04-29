@@ -1,4 +1,4 @@
-<div class="row align-items-center">
+<div class="row">
     <div class="col-md-6 order-2 order-md-1 rounded shadow bg-white text-center text-md-left">
         <h1 class="font-weight-bold mb-4"><?= $this->get('settings')['siteName'] ?? '' ?></h1>
         <?php
