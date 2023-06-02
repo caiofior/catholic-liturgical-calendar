@@ -11,7 +11,7 @@
                 </div> 
                 </p>
                 <p>
-                    <a href="<?= $this->get('settings')['baseUrl'] ?>/index.php/preghiere?calendario=<?=$calendar->getData()['id']??null?>&giorno=<?= $previousDay->format('Y-m-d');?>" titile="<?= $previousDay->format('d/m/Y'); ?>">
+                    <a href="<?= $this->get('settings')['baseUrl'] ?>/index.php/preghiere?calendario=<?=$calendar->getData()['id']??null?>&giorno=<?= $previousDay->format('Y-m-d');?>" title="<?= $previousDay->format('d/m/Y'); ?>">
                     <span class="icon-container">
                         <span class="ti-angle-left"></span>
                     </span>
@@ -52,7 +52,7 @@
                 <table
                     data-toggle="table"
                     data-locale="it"
-                    data-url="preghiere/list?calendario=<?=$calendar->getData()['id']?>&giorno=<?=$today->format('Y-m-d');?>"
+                    data-url="<?= $this->get('settings')['baseUrl'] ?>/index.php/preghiere/list?calendario=<?=$calendar->getData()['id']?>&giorno=<?=$today->format('Y-m-d');?>"
                     data-side-pagination="server"
                     data-pagination="true"
                     data-search="true">

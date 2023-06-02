@@ -23,6 +23,7 @@ class Calendar {
        '02-02'=>'Presentation in the Temple',
        '03-19'=>'Saint Joseph',
        '03-25'=>'Saint Annunciation',
+       '06-24'=>'Saint John',
    ];
    /**
     * Gets the liturgic calendar data of the required date
@@ -58,6 +59,13 @@ class Calendar {
     * @return array
     */
    private function initCalendar(int $year) {
+      $saints = array_flip($this->specialFest);
+      $saintJosep = \DateTime::createFromFormat('Y-m-d',$year.'-'.$saints['Saint Joseph']);
+      if($saintJosep->format('w') == 0) {
+         unset($this->specialFest['03-19']);
+         $this->specialFest['03-20']='Saint Joseph';
+      }
+      
       $weekTime = array_fill(1, self::weeksInYear, 'O');
       $date = new \DateTime('+8 days 1 January '.$year);
       $epiphanyWeek = $date->format('W');
@@ -75,7 +83,7 @@ class Calendar {
       }
       $weekTime[$easterWeek]='T';
       
-      $pentecostWeek = $easterWeek+8;
+      $pentecostWeek = $easterWeek+9;
       
       for($c = $easterWeek+1; $c <$pentecostWeek; $c++) {
          $weekTime[$c]='E';
@@ -186,6 +194,45 @@ class Calendar {
                 $easterMonday->setTime(0, 0, 0);
                 $easterMonday->setISODate($year, $weekNumber, 1);
                 $this->specialFest[$easterMonday->format('m-d')]='Easter Monday';
+                                
+         }
+         if (
+                 $currentWeekTime == 'E' &&
+                 $times[$currentWeekTime] == 7
+                 ) {
+                
+                   $ascensionDay = new \DateTime();
+                   $ascensionDay->setTime(0, 0, 0);
+                   $ascensionDay->setISODate($year, $weekNumber, 0);
+                   $this->specialFest[$ascensionDay->format('m-d')]='Ascension Day';
+                                
+         }
+         if (
+                 $currentWeekTime == 'E' &&
+                 $times[$currentWeekTime] == 8
+                 ) {
+                
+                   $pentecost = new \DateTime();
+                   $pentecost->setTime(0, 0, 0);
+                   $pentecost->setISODate($year, $weekNumber, 0);
+                   $this->specialFest[$pentecost->format('m-d')]='Pentecost';
+                   
+                   $times['O']++;
+                   
+                   $holyTrinity = new \DateTime();
+                   $holyTrinity->setTime(0, 0, 0);
+                   $holyTrinity->setISODate($year, $weekNumber+1, 0);
+                   $this->specialFest[$holyTrinity->format('m-d')]='Holy Trinity';
+                   
+                   $corpusChristi = new \DateTime();
+                   $corpusChristi->setTime(0, 0, 0);
+                   $corpusChristi->setISODate($year, $weekNumber+2, 0);
+                   $this->specialFest[$corpusChristi->format('m-d')]='Corpus Christi';
+                   
+                   $sacredHeart = new \DateTime();
+                   $sacredHeart->setTime(0, 0, 0);
+                   $sacredHeart->setISODate($year, $weekNumber+2, 5);
+                   $this->specialFest[$sacredHeart->format('m-d')]='Sacred Heart';
                                 
          }
          $week =new Week();

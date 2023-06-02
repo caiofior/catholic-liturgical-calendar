@@ -46,14 +46,14 @@ class CalendarProperties {
                     ->fetchFirstColumn();
 
             $query = $queryBuilder
-                    ->select('cp.*', 'l.username')
+                    ->select('cp.*', 'GROUP_CONCAT(l.username)')
                     ->from('calendar_properties', 'cp')
                     ->join(
                     'cp',
                     'login',
                     'l',
-                    'cp.profile_id = l.profile_id'
-            );
+                    'cp.profile_id = l.profile_id')
+                    ;
             if (!empty($request->getQueryParams()['search'])) {
                 $query = $query
                         ->where(
