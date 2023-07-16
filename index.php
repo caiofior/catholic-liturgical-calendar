@@ -22,7 +22,12 @@ $app->redirect('/index.php', ($app->getContainer()->get('settings')['basePath'] 
 session_start();
 
 $app->get('/', function (Request $request, Response $response, $args) {
-    $theme = ($this->get('settings')['theme'] ?? '');
+    $userAgent = ($request->getHeader('User-Agent')[0]??'');
+    if (stripos($userAgent,'curl') === 0) {
+    	require __DIR__ . '/theme/cli/index.php';
+	exit();
+    }
+    $theme = ($this->get('settings')['theme'] ?? '');	
     if (!empty($theme)) {
         require __DIR__ . '/theme/' . $theme . '/index.php';
     }
