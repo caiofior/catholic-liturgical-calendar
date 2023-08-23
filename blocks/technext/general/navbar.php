@@ -33,12 +33,6 @@
           <a class="nav-link dropdown-toggle" href="<?=$this->get('settings')['baseUrl'] ?>/index.php/logout">Esci</a>
         </li>
         <?php endif; ?>
-        <li class="nav-item @@about">
-          <a class="nav-link" href="about.html">About</a>
-        </li>
-        <li class="nav-item @@contact">
-          <a class="nav-link" href="contact.html">Contact</a>
-        </li>
       </ul>
     </div>
   </div>

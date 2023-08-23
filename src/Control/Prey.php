@@ -21,6 +21,10 @@ class Prey {
     public static function parse(RouteCollectorProxy $group) {
         $group->any('', function (Request $request, Response $response, $args) {
             $entityManager = $this->get('entity_manager');
+            $login = $entityManager->find('\Caiofior\Core\model\Login', ($_SESSION['username'] ?? ''));
+	    if(!is_object($login)) {
+	        return $response->withHeader('Location', $this->get('settings')['baseUrl'] . '/index.php')->withStatus(302);
+	    }
             $dateFormatter = $this->get('date_formatter');
             $calendarId = (int)($request->getQueryParams()['calendario'] ?? 0);
             if($calendarId == 0) {
@@ -49,7 +53,10 @@ class Prey {
         $group->any('/list', function (Request $request, Response $response, $args) {
             /** @var \Doctrine\ORM\EntityManager $entityManager */
             $entityManager = $this->get('entity_manager');
-            
+            $login = $entityManager->find('\Caiofior\Core\model\Login', ($_SESSION['username'] ?? ''));
+	    if(!is_object($login)) {
+	        return $response->withHeader('Location', $this->get('settings')['baseUrl'] . '/index.php')->withStatus(302);
+	    }
             $today = \DateTime::createFromFormat('Y-m-d', ($request->getQueryParams()['giorno']??''));
             if(!is_object($today)) {
                 $today = new \DateTime();
@@ -262,6 +269,9 @@ EOT;
             $page = 'prey/add';
             /** @var \Caiofior\Core\model\Login $login */
             $login = $entityManager->find('\Caiofior\Core\model\Login', ($_SESSION['username'] ?? ''));
+	    if(!is_object($login)) {
+	        return $response->withHeader('Location', $this->get('settings')['baseUrl'] . '/index.php')->withStatus(302);
+	    }
             /** @var \Caiofior\Core\model\Profile $profile */
             $profile = $entityManager->find('\Caiofior\Core\model\Profile', ($login->getProfileId() ?? null));
             /** @var \Caiofior\Core\model\Role $role */

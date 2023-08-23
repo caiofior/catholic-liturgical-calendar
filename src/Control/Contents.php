@@ -30,6 +30,10 @@ class Contents {
         $group->any('/list', function (Request $request, Response $response, $args) {
             /** @var \Doctrine\ORM\EntityManager $entityManager */
             $entityManager = $this->get('entity_manager');
+	    $login = $entityManager->find('\Caiofior\Core\model\Login', ($_SESSION['username'] ?? ''));
+	    if(!is_object($login)) {
+	        return $response->withHeader('Location', $this->get('settings')['baseUrl'] . '/index.php')->withStatus(302);
+	    }
             $queryBuilder = $entityManager
                     ->getConnection()
                     ->createQueryBuilder();
@@ -97,6 +101,10 @@ EOT;
             $theme = ($this->get('settings')['theme'] ?? '');
             /** @var \Doctrine\ORM\EntityManager $entityManager */
             $entityManager = $this->get('entity_manager');
+	    $login = $entityManager->find('\Caiofior\Core\model\Login', ($_SESSION['username'] ?? ''));
+	    if(!is_object($login)) {
+	        return $response->withHeader('Location', $this->get('settings')['baseUrl'] . '/index.php')->withStatus(302);
+	    }
             $message = '';
             $page = 'content/add';
             $content = new \Caiofior\Core\Content();
