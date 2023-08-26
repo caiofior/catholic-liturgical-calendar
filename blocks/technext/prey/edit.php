@@ -33,10 +33,10 @@
                 </div>
                 <?php if($catholicCalendar->getSpecialFest() !== false) : ?>
                 <div class="col-md-12 mb-2">
-                    <?php 
-                    $checked = ' checked="checked" ';
-                    if(empty($prey->getData()['special_fest'])) {
-                        $checked = '';
+                    <?php
+                    $checked = ''; 
+                    if(!empty($prey->getData()['special_fest'])) {
+                        $checked = ' checked="checked" ';    
                     }
                     ?>
                     <input type="checkbox" name="use_special_fest"<?=$checked?>/>
@@ -46,12 +46,12 @@
                 <?php endif; ?>
                 <div class="col-md-12 mb-2">
                     <?php
-                    $checked = ' checked="checked" ';
+                    $checked = '';
                     if(
-                            empty($prey->getData()['lithurgicEve']) &&
-                            empty($calendar->getData()['lithurgicEve'])
+                            !empty($prey->getData()['lithurgicEve']) ||
+                            !empty($calendar->getData()['lithurgicEve'])
                             ) {
-                        $checked = '';
+                                $checked = ' checked="checked" ';
                     }
                     ?>
                     <input type="checkbox" name="use_lithurgic_eve" <?=$checked?>/>
@@ -60,12 +60,14 @@
                 </div>
                 <div class="col-md-12 mb-2">
                     <?php
-                    $checked = ' checked="checked" ';
+                    
+                    $checked = '';
                     if(
-                            empty($prey->getData()['lithurgicYear']) &&
-                            empty($calendar->getData()['lithurgicYear'])
+                            !empty($prey->getData()['lithurgicYear']) ||
+                            !empty($calendar->getData()['lithurgicYear'])
                             ) {
-                        $checked = '';
+                        $checked = ' checked="checked" ';        
+                        
                     }
                     ?>
                     <input type="checkbox" name="use_lithurgic_week" <?=$checked?>/>
@@ -74,12 +76,12 @@
                 </div>
                 <div class="col-md-12 mb-2">
                     <?php
-                    $checked = ' checked="checked" ';
+                    $checked = '';
                     if(
-                            empty($prey->getData()['salther']) &&
-                            empty($calendar->getData()['salther'])
+                            !empty($prey->getData()['salther']) ||
+                            !empty($calendar->getData()['salther'])
                             ) {
-                        $checked = '';
+                                $checked = ' checked="checked" ';
                     }
                     ?>
                     <input type="checkbox" name="use_salter_week" <?=$checked?>/>
@@ -88,12 +90,12 @@
                 </div>
                 <div class="col-md-12 mb-2">
                     <?php
-                    $checked = ' checked="checked" ';
+                    $checked = '';
                     if(
-                            empty($prey->getData()['lithurgicYear']) &&
-                            empty($calendar->getData()['lithurgicYear'])
+                            !empty($prey->getData()['lithurgicYear']) ||
+                            !empty($calendar->getData()['lithurgicYear'])
                             ) {
-                        $checked = '';
+                            $checked = ' checked="checked" ';
                     }
                     ?>
                     <input type="checkbox" name="use_lithurgic_year" <?=$checked?>/>
@@ -102,11 +104,11 @@
                 </div>
                 <div class="col-md-12 mb-2">
                     <?php
-                    $checked = ' checked="checked" ';
+                    $checked = '';
                     if(
-                            empty($prey->getData()['day_of_week'])
+                            !empty($prey->getData()['day_of_week'])
                             ) {
-                        $checked = '';
+                            $checked = ' checked="checked" ';
                     }
                     ?>
                     <input type="checkbox" name="use_day_of_week" <?=$checked?>/>
@@ -115,11 +117,11 @@
                 </div>
                 <div class="col-md-12 mb-2">
                      <?php
-                    $checked = ' checked="checked" ';
+                    $checked = ''; 
                     if(
-                            empty($prey->getData()['day_of_year'])
+                            !empty($prey->getData()['day_of_year'])
                             ) {
-                        $checked = '';
+                            $checked = ' checked="checked" ';
                     }
                     ?>
                     <input type="checkbox" name="use_day_of_year" <?=$checked?>/>
