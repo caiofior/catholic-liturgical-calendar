@@ -26,6 +26,7 @@ class Calendar {
        '06-24'=>'Saint John',
        '06-29'=>'Saint Peter',
        '08-15'=>'Assumption of Mary',
+       '09-14'=>'Exaltation of the cross',
    ];
    /**
     * Gets the liturgic calendar data of the required date
