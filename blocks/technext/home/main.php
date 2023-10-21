@@ -70,6 +70,9 @@
         </p>
     </div>
     <div class="col-md-6 text-center order-1 order-md-2">
-        <img class="img-fluid" src="<?= $this->get('settings')['baseUrl'] ?>//theme/technext/small-apps/images/spiritualita.png" alt="screenshot">
+        <picture>
+	    <source media="(min-width: 650px)" srcset="<?= $this->get('settings')['baseUrl'] ?>//theme/technext/small-apps/images/spiritualita.png">
+            <img class="img-fluid" src="" alt="screenshot">
+        <picture>
     </div>
 </div>
