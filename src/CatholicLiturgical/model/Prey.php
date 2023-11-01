@@ -11,6 +11,7 @@ use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\Table;
+use Doctrine\ORM\Mapping\Index;
 
 Type::addType('point', 'CrEOF\Spatial\DBAL\Types\Geometry\PointType');
 /**
@@ -18,7 +19,17 @@ Type::addType('point', 'CrEOF\Spatial\DBAL\Types\Geometry\PointType');
  *
  * @author caiofior
  */
-#[Entity, Table(name: 'prey')]
+#[Entity]
+#[Table(name: 'prey')]
+#[Index(name: "calendar_id", columns: ["calendar_id"])]
+#[Index(name: "approved", columns: ["approved"])]
+#[Index(name: "day_of_year", columns: ["day_of_year"])]
+#[Index(name: "lithurgic_year", columns: ["lithurgic_year"])]
+#[Index(name: "lithurgic_eve", columns: ["lithurgic_eve"])]
+#[Index(name: "salter_week", columns: ["salter_week"])]
+#[Index(name: "day_of_week", columns: ["day_of_week"])]
+#[Index(name: "lithurgic_week", columns: ["lithurgic_week"])]
+#[Index(name: "special_fest", columns: ["special_fest"])]
 final class Prey implements \JsonSerializable {
 
     #[Id, Column(type: 'integer', unique: true, nullable: false), GeneratedValue]

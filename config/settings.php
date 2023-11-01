@@ -4,7 +4,7 @@
 error_reporting(E_ALL);
 // Should be set to '0' in production
 ini_set('display_errors', '1');
-$basePath = '/~caio/catholic-liturgical-calendar';
+$basePath = '/~caiofior/catholic-liturgical-calendar';
 // Settings
 $settings = [
     'basePath' => $basePath,
@@ -33,7 +33,7 @@ $settings = [
             'host' => '127.0.0.1',
             'port' => 3306,
             'dbname' => 'precesit69987',
-            'user' => 'caio',
+            'user' => 'caiofior',
             'password' => 'topolino',
             'charset' => 'UTF8',
             'options' => [

@@ -69,7 +69,7 @@ class Prey {
             /** @var \Caiofior\CatholicLiturgical\model\CalendarProperties $calendar */
             $calendar = $entityManager->find('\Caiofior\CatholicLiturgical\model\CalendarProperties', $calendarId);
 
-            $lithurgicCalendar = new \Caiofior\CatholicLiturgical\Calendar($today->format('Y-m-d'));           
+            $lithurgicCalendar = new \Caiofior\CatholicLiturgical\Calendar($today->format('Y-m-d'));
             
             $queryBuilder = $entityManager
                     ->getConnection()
@@ -118,7 +118,13 @@ class Prey {
             
             $query = $query->orWhere($queryBuilder->expr()->eq('p.today', ':today'))
                     ->setParameter('today', $today->format('Y-m-d'));
-            
+            if(!empty($lithurgicCalendar->getSpecialFest())) {
+                        $query = $query
+                        ->orWhere(
+                                $queryBuilder->expr()->eq('p.special_fest', ':special_fest')
+                        )
+                        ->setParameter('special_fest', $lithurgicCalendar->getSpecialFest());
+            }
             if(!empty($calendar->getData()['id'])) {
             $query = $query
                         ->andWhere(
@@ -182,6 +188,13 @@ class Prey {
                                 $queryBuilder->expr()->eq('p.calendar_id', ':calendar')
                         )
                         ->setParameter('calendar', $calendar->getData()['id']);
+            }
+            if(!empty($lithurgicCalendar->getSpecialFest())) {
+                        $query = $query
+                        ->orWhere(
+                                $queryBuilder->expr()->eq('p.special_fest', ':special_fest')
+                        )
+                        ->setParameter('special_fest', $lithurgicCalendar->getSpecialFest());
             }
             if (!empty($request->getQueryParams()['search'])) {
                 $query = $query
