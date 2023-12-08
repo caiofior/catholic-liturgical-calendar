@@ -29,6 +29,7 @@ class Calendar {
        '09-14'=>'Exaltation of the cross',
        '11-01'=>'All Saints',
        '11-02'=>'Day of the Dead',
+       '11-09'=>'Dedication of the Lateran Basilica',
    ];
    /**
     * Gets the liturgic calendar data of the required date
@@ -93,13 +94,13 @@ class Calendar {
       for($c = $easterWeek+1; $c <$pentecostWeek; $c++) {
          $weekTime[$c]='E';
       }
-      $date = new \DateTime('26 November '.$year);
+      $date = new \DateTime('27 November '.$year);
       $adventWeek = $date->format('W')+1;
       
       $moduleYear = $year % 3;
       if (
-              $this->inputDate->format('W') > $adventWeek && 
-              $this->inputDate->format('z') > 5
+              (int)$this->inputDate->format('W') >= $adventWeek && 
+              (int)$this->inputDate->format('z') > 5
               ) {
           $moduleYear +=1;
       }

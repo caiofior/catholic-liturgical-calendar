@@ -104,10 +104,6 @@ class SearchPrey {
     }
     
     private function getLithurgicEve(& $query ,$queryBuilder,$lithurgicCalendar) {
-         if ($this->calendar->getData()['lithurgicYear'] == true) {
-            $query = $query->andWhere($queryBuilder->expr()->eq('p.lithurgic_year', ':lithurgic_year'))
-                    ->setParameter('lithurgic_year', $lithurgicCalendar->getLithurgicYear());
-         }
          if ($this->calendar->getData()['lithurgicEve'] == true) {
             $query = $query->where(
                                     $queryBuilder->expr()->andX(
@@ -119,6 +115,12 @@ class SearchPrey {
                     ->setParameter('lithurgic_week', $lithurgicCalendar->getDateTime()->getWeekTimeNumber());
         } else {
             $query = $query->where('FALSE');
+        }
+        if ($this->calendar->getData()['lithurgicYear'] == true) {
+            $query = $query->where(
+                        $queryBuilder->expr()->eq('p.lithurgic_year', ':lithurgic_year')
+                    )
+                    ->setParameter('lithurgic_year', $lithurgicCalendar->getLithurgicYear());
         }
 
         if (!empty($this->calendar->getData()['id'])) {
