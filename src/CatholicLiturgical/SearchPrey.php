@@ -105,19 +105,19 @@ class SearchPrey {
     
     private function getLithurgicEve(& $query ,$queryBuilder,$lithurgicCalendar) {
          if ($this->calendar->getData()['lithurgicEve'] == true) {
-            $query = $query->where(
-                                    $queryBuilder->expr()->andX(
-                                            $queryBuilder->expr()->eq('p.lithurgic_eve', ':lithurgic_eve'),
-                                            $queryBuilder->expr()->eq('p.lithurgic_week', ':lithurgic_week')
-                                    )
-                            )
+            $query = $query->andWhere(
+                         $queryBuilder->expr()->eq('p.lithurgic_eve', ':lithurgic_eve')
+                    )
+                    ->andWhere(
+                          $queryBuilder->expr()->eq('p.lithurgic_week', ':lithurgic_week')
+                    )
                     ->setParameter('lithurgic_eve', $lithurgicCalendar->getDateTime()->getTime())
                     ->setParameter('lithurgic_week', $lithurgicCalendar->getDateTime()->getWeekTimeNumber());
         } else {
-            $query = $query->where('FALSE');
+            $query = $query->andWhere('FALSE');
         }
         if ($this->calendar->getData()['lithurgicYear'] == true) {
-            $query = $query->where(
+            $query = $query->andWhere(
                         $queryBuilder->expr()->eq('p.lithurgic_year', ':lithurgic_year')
                     )
                     ->setParameter('lithurgic_year', $lithurgicCalendar->getLithurgicYear());
