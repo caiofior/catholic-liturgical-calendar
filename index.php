@@ -12,7 +12,6 @@ $containerBuilder = new ContainerBuilder();
 
 // Add DI container definitions
 $containerBuilder->addDefinitions(__DIR__ . '/config/container.php');
-
 // Create Slim App instance
 AppFactory::setContainer($containerBuilder->build());
 $app = AppFactory::create();
@@ -20,7 +19,10 @@ $app = AppFactory::create();
 $app->setBasePath(($app->getContainer()->get('settings')['basePath'] ?? ''));
 $app->redirect('/index.php', ($app->getContainer()->get('settings')['basePath'] ?? '') . '/', 301);
 session_start();
-
+if(rand(1,100)==1) {
+    $command = 'php '.__DIR__.'/cli/cli-config.php seo:sitemap-generator >/dev/null 2>&1 &';
+    exec($command);
+}
 $app->get('/', function (Request $request, Response $response, $args) {
     $userAgent = ($request->getHeader('User-Agent')[0]??'');
     if (stripos($userAgent,'curl') === 0) {

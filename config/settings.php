@@ -9,6 +9,7 @@ $basePath = '/~caiofior/catholic-liturgical-calendar';
 $settings = [
     'basePath' => $basePath,
     'baseUrl' => ($_SERVER['HTTPS']??'' == 'on' ? 'https':'http').'://' . ($_SERVER['SERVER_NAME'] ?? '') . $basePath,
+    'siteUrl' => 'https://www.preces.it',
     'theme' => 'technext/small-apps',
     'siteName' => 'Calendario liturgico',
     'locale' => 'it_IT',

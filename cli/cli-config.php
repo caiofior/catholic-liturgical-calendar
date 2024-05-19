@@ -2,6 +2,8 @@
 use DI\ContainerBuilder;
 use Doctrine\ORM\Tools\Console\ConsoleRunner;
 use Doctrine\ORM\Tools\Console\EntityManagerProvider\SingleManagerProvider;
+use Doctrine\ORM\Tools\Console\EntityManagerProvider\HelperSetManagerProvider;
+use Doctrine\ORM\Tools\Console\EntityManagerProvider\ConnectionFromManagerProvider;
 use Slim\Factory\AppFactory;
 
 require __DIR__ . '/../vendor/autoload.php';
@@ -16,10 +18,9 @@ AppFactory::setContainer($containerBuilder->build());
 $app = AppFactory::create();
 
 $entityManager = $app->getContainer()->get('entity_manager');
-
+$singleManagerProvider = new SingleManagerProvider($entityManager);
 $commands=[];
-
-ConsoleRunner::run(
-    new SingleManagerProvider($entityManager),
-    $commands
-);
+$cli = ConsoleRunner::createApplication($singleManagerProvider,
+    $commands);
+$cli->add(new Caiofior\CatholicLiturgical\command\Sitemap($app->getContainer()));
+$cli->run();
