@@ -127,7 +127,7 @@ EOT
                     }
                 }
                 if ($isNew === true) {
-                    $url = $siteUrl . '?calendario='.$calendar->getData()['id'].'&giorno='.$today->format('Y-m-d');
+                    $url = $siteUrl . '?calendario='.$calendar->getData()['id'].'&amp;giorno='.$today->format('Y-m-d');
                     file_put_contents($sitenameFilePath, <<<EOT
   <url>
      <loc>{$url}</loc>

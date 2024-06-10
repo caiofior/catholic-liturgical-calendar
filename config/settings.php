@@ -4,15 +4,29 @@
 error_reporting(E_ALL);
 // Should be set to '0' in production
 ini_set('display_errors', '1');
-$basePath = '/~caiofior/catholic-liturgical-calendar';
+$basePath = '/~caio/preces.it';
 // Settings
 $settings = [
     'basePath' => $basePath,
+    'baseDir' => realpath(__DIR__.'/../'),
     'baseUrl' => ($_SERVER['HTTPS']??'' == 'on' ? 'https':'http').'://' . ($_SERVER['SERVER_NAME'] ?? '') . $basePath,
     'siteUrl' => 'https://www.preces.it',
     'theme' => 'technext/small-apps',
     'siteName' => 'Calendario liturgico',
     'locale' => 'it_IT',
+    'encryption' => [
+        'method' => 'AES-256-CBC',
+        'password' => 'snakeoil',
+        'salt' => 'spickyText'
+    ],
+    'mail' => [
+        'host'=>'mail.test.it',
+        'auth'=>true,
+        'username'=>'test.it',
+        'password'=>'snakeoin',
+        'port'=>587,
+        'secure'=>'tls'
+    ],
     'doctrine' => [
         // Enables or disables Doctrine metadata caching
         // for either performance or convenience during development.
@@ -34,7 +48,7 @@ $settings = [
             'host' => '127.0.0.1',
             'port' => 3306,
             'dbname' => 'precesit69987',
-            'user' => 'caiofior',
+            'user' => 'caio',
             'password' => 'topolino',
             'charset' => 'UTF8',
             'options' => [

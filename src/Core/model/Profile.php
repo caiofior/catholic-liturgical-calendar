@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping\Id;
 use Doctrine\ORM\Mapping\Table;
 
 /**
- * Description of User
+ * Description of profile
  *
  * @author caiofior
  */
@@ -75,6 +75,15 @@ final class Profile {
     public function setRoleId($role_id) {
         $this->role_id = $role_id;
     }
+     /**
+     * Active/Deactive
+     * @param int $role_id
+     */
+    public function active($status) {
+        $this->active = (
+            (bool)$status === true ? 1 :0
+        );
+    }
     /**
      * Set data
      * @param array $data
@@ -100,6 +109,15 @@ final class Profile {
             $data[$field]=$value; 
         }
         return $data;
+    }
+    /**
+     * Creates validation string
+     * @return string
+     */
+    public function createValidationUrl() {
+        var_dump($this);
+        return 'testurl';
+
     }
     
 }
