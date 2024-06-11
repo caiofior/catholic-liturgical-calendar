@@ -30,17 +30,31 @@ class ProfileValidation {
      */
     private function initializeSecrets() {
         $this->method = $this->container->get('settings')['encryption']['method']??'';
-        $key_size = openssl_cipher_key_length($this->method);
-        $password = $this->container->get('settings')['encryption']['password']??'';
-        $this->encryption_key = openssl_random_pseudo_bytes($key_size, $password);
-
-        $iv_size = openssl_cipher_iv_length($this->method);
-        $salt = $this->container->get('settings')['encryption']['salt']??'';
-        $this->iv = openssl_random_pseudo_bytes($iv_size, $salt);
+        if (!empty($this->container->get('settings')['encryption']['encryption_key'])) {
+            $this->encryption_key = base64_decode($this->container->get('settings')['encryption']['encryption_key']);
+        } else {
+            $key_size = openssl_cipher_key_length($this->method);
+            $password = $this->container->get('settings')['encryption']['password']??'';
+            $this->encryption_key = openssl_random_pseudo_bytes($key_size, $password);
+            throw new \Exception('Encription key '.base64_encode($this->encryption_key),202406101630);
+        }
+        if (!empty($this->container->get('settings')['encryption']['iv'])) {
+            $this->iv = base64_decode($this->container->get('settings')['encryption']['iv']);
+        } else {
+            $iv_size = openssl_cipher_iv_length($this->method);
+            $salt = $this->container->get('settings')['encryption']['salt']??'';
+            $this->iv = openssl_random_pseudo_bytes($iv_size, $salt);
+            throw new \Exception('IV '.base64_encode($this->iv),202406101630);
+        }
     }
 
     public function sentValidationMail (Profile $profile) {
         $baseDir = $this->container->get('settings')['baseDir']??'';
+        $entityManager = $this->container->get('entity_manager');
+        $profile->active(false);
+        $entityManager->persist($profile);
+        $entityManager->flush();
+
         $url = $this->generateValidationUrl($profile);
 
         $bodyTemplateContent =  file_get_contents($baseDir.'/mail/validate_profile.html');
@@ -65,17 +79,23 @@ class ProfileValidation {
 
         
 
-    //Recipients
-    $mail->setFrom('info@preces.it', 'Mailer');
-    $mail->addAddress('c.fior@abbrevia.it', 'Joe User');     //Add a recipient
+        //Recipients
+        $mail->setFrom(
+            $this->container->get('settings')['mail']['fromMail']??'',
+            $this->container->get('settings')['mail']['fromName']??''
+        );
+        $mail->addAddress(
+            $profile->getData()['email'],
+            trim(($profile->getData()['first_name']??'').' '.($profile->getData()['last_name']??''))
+        );
 
 
-    //Content
-    $mail->isHTML(true);                                  //Set email format to HTML
-    $mail->Subject = 'Iscrizione al sito '.$this->container->get('settings')['siteName']??'';
-    $mail->Body    = $bodyContent;
+        //Content
+        $mail->isHTML(true);
+        $mail->Subject = 'Iscrizione al sito '.$this->container->get('settings')['siteName']??'';
+        $mail->Body    = $bodyContent;
 
-    $mail->send();
+        $mail->send();
 
         
     }
@@ -104,14 +124,17 @@ class ProfileValidation {
      * Validates the token
      */
     public function validateToken(string $token) {
-
-        $profileData = json_decode(openssl_decrypt(
+        $profileData = openssl_decrypt(
             base64_decode($token),
             $this->method,
             $this->encryption_key,
             0,
             $this->iv
-        ));
+        );
+        if (!is_string($profileData)) {
+            throw new \Exception('Token corrupted',202406101529);
+        }
+        $profileData = json_decode($profileData);
         if (!is_object($profileData)) {
             throw new \Exception('Token corrupted',202406101529);
         }

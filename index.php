@@ -5,6 +5,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Routing\RouteCollectorProxy;
 use Slim\Factory\AppFactory;
+use Caiofior\Core\ProfileValidation;
 
 require __DIR__ . '/vendor/autoload.php';
 
@@ -41,7 +42,11 @@ $app->any('/index.php/login', function (Request $request, Response $response, $a
     $entityManager = $this->get('entity_manager');
     $message = '';
     $page = 'login';
-    if (isset($request->getParsedBody()['register'])) {
+    if(!empty($request->getQueryParam('validation'))) {
+        $profileValidation = new ProfileValidation($this);
+        $profileValidation->validateToken($request->getQueryParam('validation'));
+        $message = 'Email confemrata, accedi al sito';
+    } elseif (isset($request->getParsedBody()['register'])) {
         $entityManager->beginTransaction();
         $profile = new \Caiofior\Core\model\Profile();
         $profile->setRoleId(3);
@@ -91,6 +96,10 @@ $app->any('/index.php/login', function (Request $request, Response $response, $a
                         $message .= 'Credenziali non valide';
                         break;
                 }
+            }
+            $profile = $entityManager->find('\Caiofior\Core\model\Profile', $login->getProfileId());
+            if ($profile->getData()['active']!= 1) {
+                $message .= 'Credenziali non valide';    
             }
         } else {
             $message .= 'Credenziali non valide';
