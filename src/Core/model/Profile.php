@@ -109,15 +109,5 @@ final class Profile {
             $data[$field]=$value; 
         }
         return $data;
-    }
-    /**
-     * Creates validation string
-     * @return string
-     */
-    public function createValidationUrl() {
-        var_dump($this);
-        return 'testurl';
-
-    }
-    
+    }    
 }

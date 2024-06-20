@@ -22,6 +22,22 @@
         <a id="show_register" class="btn btn-rounded-icon" href="#">Vuoi registrarti?</a>
     </div>
     <div class="col-12">
+        <?= $message; ?>
+        <form id="recover" style="display: none;" method="post">
+            <div class="row">
+                <div class="col-md-6 mb-2">
+                <input name="username" class="form-control main" type="text" placeholder="Nome utente" required value="<?=$request->getParsedBody()['username']??''?>"/>
+                </div>
+                <div class="col-12 mb-4">
+                <input type="submit" class="btn btn-main-md" name="recover" value="Recupera password"/>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-12">
+        <a id="show_recover" class="btn btn-rounded-icon" href="#">Recupera password</a>
+    </div>
+    <div class="col-12">
         <form id="register" style="display: none;" method="post">
             <div class="row">
                 <div class="col-12">

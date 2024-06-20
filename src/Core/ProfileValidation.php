@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace Caiofior\Core;
 use DI\Container;
 use Caiofior\Core\model\Profile;
+use Caiofior\Core\model\Login;
 use DateTime;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
@@ -93,6 +94,70 @@ class ProfileValidation {
         //Content
         $mail->isHTML(true);
         $mail->Subject = 'Iscrizione al sito '.$this->container->get('settings')['siteName']??'';
+        $mail->Body    = $bodyContent;
+
+        $mail->send();
+
+        
+    }
+
+    public function sentRecoverMail (Login $login) {
+        $baseDir = $this->container->get('settings')['baseDir']??'';
+        $entityManager = $this->container->get('entity_manager');        
+
+        $profile = $entityManager->find('\Caiofior\Core\model\Profile',$login->getProfileId());
+        $profile->active(true);
+        $entityManager->persist($profile);
+
+        $n = 6;
+        $password = '';
+        for ($c = 0; $c < 6 ; $c++) {
+            $password .= ((rand(1,4) != 1) ? chr(rand(97, 122)) : rand(0, 9));
+        }
+        
+        $login->setPassword($password);
+        $entityManager->persist($login);
+
+
+        $entityManager->flush();
+
+        $url = $this->generateValidationUrl($profile);
+
+        $bodyTemplateContent =  file_get_contents($baseDir.'/mail/recover.html');
+
+        $bodyContent = sprintf(
+            $bodyTemplateContent,
+            $this->container->get('settings')['siteName']??'',
+            $password
+        );
+        $mail = new PHPMailer(true);
+
+        //Server settings
+        $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+        $mail->isSMTP();
+        $mail->Host       = $this->container->get('settings')['mail']['host']??'';
+        $mail->SMTPAuth   = $this->container->get('settings')['mail']['auth']??'';
+        $mail->Username   = $this->container->get('settings')['mail']['username']??'';
+        $mail->Password   = $this->container->get('settings')['mail']['password']??'';
+        $mail->SMTPSecure = $this->container->get('settings')['mail']['secure']??'';
+        $mail->Port       = $this->container->get('settings')['mail']['port']??'';
+
+        
+
+        //Recipients
+        $mail->setFrom(
+            $this->container->get('settings')['mail']['fromMail']??'',
+            $this->container->get('settings')['mail']['fromName']??''
+        );
+        $mail->addAddress(
+            $profile->getData()['email'],
+            trim(($profile->getData()['first_name']??'').' '.($profile->getData()['last_name']??''))
+        );
+
+
+        //Content
+        $mail->isHTML(true);
+        $mail->Subject = 'Recupera password sito '.$this->container->get('settings')['siteName']??'';
         $mail->Body    = $bodyContent;
 
         $mail->send();

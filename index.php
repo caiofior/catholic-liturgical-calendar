@@ -45,7 +45,7 @@ $app->any('/index.php/login', function (Request $request, Response $response, $a
     if(!empty($request->getQueryParam('validation'))) {
         $profileValidation = new ProfileValidation($this);
         $profileValidation->validateToken($request->getQueryParam('validation'));
-        $message = 'Email confemrata, accedi al sito';
+        $message = 'Email confermata, accedi al sito';
     } elseif (isset($request->getParsedBody()['register'])) {
         $entityManager->beginTransaction();
         $profile = new \Caiofior\Core\model\Profile();
@@ -82,8 +82,10 @@ $app->any('/index.php/login', function (Request $request, Response $response, $a
             $entityManager->rollback();
         }
         $entityManager->commit();
-    }
-    if (isset($request->getParsedBody()['login'])) {
+        $profileValidation = new ProfileValidation($this);
+        $profileValidation->sentValidationMail($profile);
+        $message = 'Email confermata, accedi al sito';
+    } elseif (isset($request->getParsedBody()['login'])) {
         /** @var \Caiofior\Core\model\Login $login */
         $login = $entityManager->find('\Caiofior\Core\model\Login', $request->getParsedBody()['username']);
         if (is_object($login)) {
@@ -108,7 +110,16 @@ $app->any('/index.php/login', function (Request $request, Response $response, $a
         $entityManager->persist($login);
         $entityManager->flush();
         $page = 'dashboard';
+    } elseif (isset($request->getParsedBody()['recover'])) {
+        $login = $entityManager->find('\Caiofior\Core\model\Login', $request->getParsedBody()['username']);
+        if (is_object($login)) {
+            $profileValidation = new ProfileValidation($this);
+            $profileValidation->sentRecoverMail($login);
+        } else {
+            $message .= 'Utente non trovato';
+        }
     }
+
     if (!empty($theme)) {
         require __DIR__ . '/theme/' . $theme . '/index.php';
     }

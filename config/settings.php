@@ -16,8 +16,10 @@ $settings = [
     'locale' => 'it_IT',
     'encryption' => [
         'method' => 'AES-256-CBC',
+        'encryption_key' => 'EYsi/LVJh0+Sk+gVa1WbCKfOry/FD4NmjQzVF/3Chxc=',
         'password' => 'snakeoil',
-        'salt' => 'spickyText'
+        'salt' => 'spickyText',
+        'iv' => 'KxaXhSa5e6vos+60FC/4Cg=='
     ],
     'mail' => [
         'host'=>'mail.test.it',
