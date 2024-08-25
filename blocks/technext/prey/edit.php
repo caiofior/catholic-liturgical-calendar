@@ -119,6 +119,7 @@
                      <?php
                     $checked = ''; 
                     if(
+                            !empty($calendar->getData()['dayOfYear']) ||
                             !empty($prey->getData()['day_of_year'])
                             ) {
                             $checked = ' checked="checked" ';

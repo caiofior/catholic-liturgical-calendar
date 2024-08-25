@@ -4,13 +4,13 @@
 error_reporting(E_ALL);
 // Should be set to '0' in production
 ini_set('display_errors', '1');
-$basePath = '/~caio/preces.it';
+$basePath = '/~caiofior/catholic-liturgical-calendar';
 // Settings
 $settings = [
     'basePath' => $basePath,
     'baseDir' => realpath(__DIR__.'/../'),
     'baseUrl' => ($_SERVER['HTTPS']??'' == 'on' ? 'https':'http').'://' . ($_SERVER['SERVER_NAME'] ?? '') . $basePath,
-    'siteUrl' => 'https://www.preces.it',
+    'siteUrl' => 'http://127.0.0.1/~caiofior/catholic-liturgical-calendar',
     'theme' => 'technext/small-apps',
     'siteName' => 'Calendario liturgico',
     'locale' => 'it_IT',
@@ -50,7 +50,7 @@ $settings = [
             'host' => '127.0.0.1',
             'port' => 3306,
             'dbname' => 'precesit69987',
-            'user' => 'caio',
+            'user' => 'caiofior',
             'password' => 'topolino',
             'charset' => 'UTF8',
             'options' => [

@@ -71,6 +71,14 @@
                     </p>
                     <input name="salther" class="form-control modal-content" type="checkbox" <?= (($calendar->getData()['salther'] ?? false) ? 'checked' : '') ?> value="1"/>
                 </div>
+                <div class="col-md-12 mb-2">
+                    <p for="dayOfYear" class="text-white">
+                        <span class="absolute">
+                            Giorno dell'anno
+                        </span>
+                    </p>
+                    <input name="dayOfYear" class="form-control modal-content" type="checkbox" <?= (($calendar->getData()['dayOfYear'] ?? false) ? 'checked' : '') ?> value="1"/>
+                </div>
                 <div class="col-12 mb-4">
                     <input type="submit" class="btn btn-main-md" name="salva" value="Salva"/>
                 </div>

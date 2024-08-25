@@ -30,7 +30,9 @@
         if ($calendarId == 0) {
             $calendarId=$defaultCalendarId;
         }
-        $calendar = $entityManager->find('\Caiofior\CatholicLiturgical\model\CalendarProperties', $calendarId);
+        if (!isset($calendar)) {
+            $calendar = $entityManager->find('\Caiofior\CatholicLiturgical\model\CalendarProperties', $calendarId);
+        }
         $searchPrey = new \Caiofior\CatholicLiturgical\SearchPrey($entityManager, $calendar, $today);
         $preys = $searchPrey->getPrey();
 	echo ' - '.$dateFormatter->format($today);

@@ -42,6 +42,9 @@ final class CalendarProperties implements \JsonSerializable {
 
     #[Column(type: 'smallint', nullable: false, options: ["default" => 0])]
     private int $salther = 0;
+    
+    #[Column(type: 'smallint', nullable: false, options: ["default" => 0])]
+    private int $dayOfYear = 0;
 
     #[Column(type: 'text', nullable: true)]
     private string $name = '';

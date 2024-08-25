@@ -129,11 +129,11 @@ EOT;
                 $calendar = $entityManager->find('\Caiofior\CatholicLiturgical\model\CalendarProperties', $args['id']);
             }
             /** @var \Caiofior\Core\model\Login $login */
-            $login = $entityManager->find('\Caiofior\Core\Login', ($_SESSION['username'] ?? ''));
+            $login = $entityManager->find('\Caiofior\Core\model\Login', ($_SESSION['username'] ?? ''));
             /** @var \Caiofior\Core\model\Profile $profile */
-            $profile = $entityManager->find('\Caiofior\Core\Profile', ($login->getProfileId() ?? null));
+            $profile = $entityManager->find('\Caiofior\Core\model\Profile', ($login->getProfileId() ?? null));
             /** @var \Caiofior\Core\model\Role $role */
-            $role = $entityManager->find('\Caiofior\Core\Role', ($profile->getRoleId() ?? null));
+            $role = $entityManager->find('\Caiofior\Core\model\Role', ($profile->getRoleId() ?? null));
             /** @var \Caiofior\Core\model\Option $option */
             $option = $entityManager->find('\Caiofior\Core\model\Option', 'default_calendar');
             if (!is_object($option)) {
